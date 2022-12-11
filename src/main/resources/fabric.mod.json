@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "libu",
+  "version": "${version}",
+
+  "name": "Libu",
+  "description": "Lumaa Library",
+  "authors": [
+    "_Lumaa_"
+  ],
+  "contact": {
+    "homepage": "https://lumination.brebond.com/"
+  },
+
+  "license": "MIT",
+  "icon": "assets/libu/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.lumaa.libu.LibuLib"
+    ]
+  },
+  "mixins": [
+    "libu.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  }
+}
