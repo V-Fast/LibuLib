@@ -1,0 +1,7 @@
+{
+  "mod.libulib.name": "LibuLib",
+  "mod.libulib.short_name": "Libu",
+
+  "update.libulib.title": "LibuLib has an update!",
+  "update.libulib.description": "You are now currently using an outdated version of LibuLib, version %d.\nWe recommend you to update to the newest version, version %d of LibuLib."
+}

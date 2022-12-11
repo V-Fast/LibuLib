@@ -6,21 +6,23 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class UpdateScreen extends Screen {
-    private final Text notice = Text.translatable("info.backrooms.update.description", BackroomsModClient.versionName, BackroomsModClient.latestVersion.get("name").toString().replace("\"", ""));
+    private final ModrinthMod mod;
+    private final Text notice;
     private MultilineText noticeLines;
-    private final Text buttonText = Text.translatable("info.backrooms.update.button");
-    private final boolean shouldCloseOnEsc = true;
 
-    public UpdateScreen() {
-        super(Text.translatable("info.backrooms.update.title").formatted(Formatting.BOLD));
+    public UpdateScreen(ModrinthMod mod, MutableText title, Text notice) throws IOException {
+        super(title.formatted(Formatting.BOLD));
+        this.mod = mod;
+        this.notice = notice;
     }
 
     @Override
@@ -31,8 +33,8 @@ public class UpdateScreen extends Screen {
         Objects.requireNonNull(this.textRenderer);
         int i = var10000 * 9;
         int j = MathHelper.clamp(90 + i + 12, this.height / 6 + 96, this.height - 24);
-        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j, 150, 20, this.buttonText, (button) -> {
-            Util.getOperatingSystem().open("https://modrinth.com/mod/backrooms/version/" + BackroomsModClient.latestVersion.get("version_number").toString().replace("\"", ""));
+        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j, 150, 20, ScreenTexts.YES, (button) -> {
+            mod.openVersion(mod.getChecker().getString("version_number"));
         }));
         this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j + 30, 150, 20, ScreenTexts.NO, (button) -> {
             this.client.setScreen(new TitleScreen());
@@ -59,6 +61,6 @@ public class UpdateScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() {
-        return this.shouldCloseOnEsc;
+        return true;
     }
 }
