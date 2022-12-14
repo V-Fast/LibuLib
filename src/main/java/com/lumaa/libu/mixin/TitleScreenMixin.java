@@ -21,33 +21,26 @@ public class TitleScreenMixin extends Screen {
     }
 
     @Inject(at = @At("TAIL"), method = "init()V")
-    public void init(CallbackInfo ci) throws IOException {
-        // update all the mods using LibuLib
-        LibuLib.getUpdates().forEach(update -> {
-            try {
-                if (!update.getString("version_number").equals(update.getMod().versionId) && !updatePopped) {
-                    if (update.getMod().versionId == "Dev") {
-                        updatePopped = true;
-                    } else {
-                        updatePopped = true;
-                        this.client.setScreen(new UpdateScreen(LibuLib.updateChecker.getMod(), Text.translatable("update.libulib.title"), Text.translatable("update.libulib.description")));
+    public void init(CallbackInfo ci) {
+        // update all the mods using LibuLib (including LibuLib)
+        if (LibuLib.getUpdates().size() > 0) {
+            LibuLib.getUpdates().forEach(update -> {
+                LibuLib.logger.info("[LibuLib] UpdateChecker - Checking %d".formatted(update.getMod().name));
+                try {
+                    if (!update.getString("version_number").equals(update.getMod().versionId) && !update.isShown()) {
+                        if (update.getMod().versionId == "Dev") {
+                            update.setShown(true);
+                        } else {
+                            update.setShown(true);
+                            this.client.setScreen(new UpdateScreen(LibuLib.updateChecker.getMod(), Text.translatable("update.libulib.title".formatted(update.getMod().name)), Text.translatable("update.libulib.description".formatted(update.getMod().name, update.getMod().versionId, update.getString("version_number"), update.getMod().name))));
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // update LibuLib (last because message will appear first if many)
-        if (LibuLib.published) {
-            if (!LibuLib.updateChecker.getString("version_number").equals(LibuLib.version) && !updatePopped) {
-                if (LibuLib.version == "Dev") {
-                    updatePopped = true;
-                } else {
-                    updatePopped = true;
-                    this.client.setScreen(new UpdateScreen(LibuLib.updateChecker.getMod(), Text.translatable("update.libulib.title"), Text.translatable("update.libulib.description")));
-                }
-            }
+            });
+        } else {
+            LibuLib.logger.error("[LibuLib] No mods in UpdateChecker list");
         }
     }
 }

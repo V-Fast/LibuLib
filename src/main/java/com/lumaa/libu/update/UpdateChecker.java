@@ -13,6 +13,7 @@ import java.util.Objects;
 public class UpdateChecker {
     private static ModrinthMod mod;
     private static JsonObject modObject;
+    private static boolean shown = false;
 
     public UpdateChecker(ModrinthMod mod) {
         this.mod = mod;
@@ -56,5 +57,13 @@ public class UpdateChecker {
 
     public static ModrinthMod getMod() {
         return mod;
+    }
+
+    public static boolean isShown() {
+        return shown;
+    }
+
+    public void setShown(boolean shown) {
+        this.shown = shown;
     }
 }
