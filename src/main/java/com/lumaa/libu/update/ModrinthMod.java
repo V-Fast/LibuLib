@@ -24,7 +24,7 @@ public class ModrinthMod {
      * Opens the Modrinth project of the mod
      */
     public void openMod() {
-        Util.getOperatingSystem().open("https://modrinth.com/mod/%d".formatted(this.slang));
+        Util.getOperatingSystem().open("https://modrinth.com/mod/%s".formatted(this.slang));
     }
 
     /**
@@ -32,7 +32,7 @@ public class ModrinthMod {
      * @param versionId The version identifier
      */
     public void openVersion(String versionId) {
-        Util.getOperatingSystem().open("https://modrinth.com/mod/%d/version/%d".formatted(this.slang, versionId));
+        Util.getOperatingSystem().open("https://modrinth.com/mod/%s/version/%s".formatted(this.slang, versionId));
     }
 
     /**

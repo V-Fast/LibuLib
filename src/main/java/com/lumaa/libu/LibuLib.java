@@ -17,7 +17,7 @@ public class LibuLib implements ClientModInitializer {
     private static final String ID = "libu";
 
     private static ArrayList<UpdateChecker> updates = new ArrayList<UpdateChecker>();
-    public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libulib", "Dev"));
+    //public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libulib", "Dev"));
     public static final String version = "Dev";
     public static final boolean published = false;
 
@@ -25,14 +25,14 @@ public class LibuLib implements ClientModInitializer {
     public void onInitializeClient() {
         logger.info("LibuLib has awaken");
 
-        if (published) {
+        /*if (published) {
             try {
                 updateChecker.findLatestVersion();
                 addUpdate(updateChecker);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public static ArrayList<UpdateChecker> getUpdates() {
@@ -40,11 +40,9 @@ public class LibuLib implements ClientModInitializer {
     }
 
     public static void addUpdate(UpdateChecker update) {
-        if (updates instanceof ArrayList<UpdateChecker>) {
+        if (updates instanceof ArrayList<UpdateChecker> && !updates.contains(update)) {
             LibuLib.updates.add(update);
             LibuLib.logger.info("[LibuLib] Found compatibility with " + update.getMod().name);
-        } else {
-            LibuLib.logger.error("Why the fuck is my arraylist not good");
         }
     }
 }
