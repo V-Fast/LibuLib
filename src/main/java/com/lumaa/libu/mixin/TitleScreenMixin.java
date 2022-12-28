@@ -25,7 +25,7 @@ public class TitleScreenMixin extends Screen {
         // update all the mods using LibuLib (including LibuLib)
         if (LibuLib.getUpdates().size() > 0) {
             LibuLib.getUpdates().forEach(update -> {
-                LibuLib.logger.info("[LibuLib] UpdateChecker - Checking %d".formatted(update.getMod().name));
+                LibuLib.logger.info("[LibuLib] UpdateChecker - Checking %s".formatted(update.getMod().name));
                 try {
                     if (!update.getString("version_number").equals(update.getMod().versionId) && !update.isShown()) {
                         if (update.getMod().versionId == "Dev") {
