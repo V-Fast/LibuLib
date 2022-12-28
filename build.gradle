@@ -12,6 +12,20 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://jitpack.io"
+		credentials { username authToken }
+	}
+}
+
+allprojects {
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://jitpack.io"
+			credentials { username authToken }
+		}
+	}
 }
 
 dependencies {
