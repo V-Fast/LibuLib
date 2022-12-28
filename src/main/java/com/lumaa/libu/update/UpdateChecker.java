@@ -2,6 +2,9 @@ package com.lumaa.libu.update;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.lumaa.libu.LibuLib;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 public class UpdateChecker {
     private static ModrinthMod mod;
     private static JsonObject modObject;
@@ -29,6 +33,8 @@ public class UpdateChecker {
             return modObject;
         }
 
+        LibuLib.logger.info("[LibuLib x %d] Checking updates...".formatted(this.mod.name));
+
         URL modrinthUrl = new URL("https://api.modrinth.com/v2/project/%d/version".formatted(this.mod.slang));
 
         HttpURLConnection connection = (HttpURLConnection) modrinthUrl.openConnection();
@@ -42,6 +48,14 @@ public class UpdateChecker {
         }
 
         modObject = JsonParser.parseString(sb.toString()).getAsJsonArray().get(0).getAsJsonObject();
+
+        if (this.mod.versionId != this.getString("version_number")) {
+            LibuLib.logger.info("[LibuLib x %d] Update found!".formatted(this.mod.name));
+        } else {
+            LibuLib.logger.info("[LibuLib x %d] No updates were found".formatted(this.mod.name));
+        }
+
+
         return modObject;
     }
 

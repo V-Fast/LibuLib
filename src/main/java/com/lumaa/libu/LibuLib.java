@@ -3,6 +3,8 @@ package com.lumaa.libu;
 import com.lumaa.libu.update.ModrinthMod;
 import com.lumaa.libu.update.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class LibuLib implements ClientModInitializer {
     public static final Logger logger = LoggerFactory.getLogger("libu");
     private static final String ID = "libu";
@@ -38,7 +41,11 @@ public class LibuLib implements ClientModInitializer {
     }
 
     public static void addUpdate(UpdateChecker update) {
-        LibuLib.updates.add(update);
-        LibuLib.logger.info("[LibuLib] Will check %d".formatted(update.getMod().name));
+        if (updates instanceof List<UpdateChecker>) {
+            LibuLib.updates.add(update);
+            LibuLib.logger.info("[LibuLib] Found compatibility with %d".formatted(update.getMod().name));
+        } else {
+            LibuLib.logger.error("Why the fuck is my list not good");
+        }
     }
 }
