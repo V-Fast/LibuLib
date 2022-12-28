@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class LibuLib implements ClientModInitializer {
@@ -37,14 +35,14 @@ public class LibuLib implements ClientModInitializer {
         }
     }
 
-    public static List<UpdateChecker> getUpdates() {
+    public static ArrayList<UpdateChecker> getUpdates() {
         return updates;
     }
 
     public static void addUpdate(UpdateChecker update) {
         if (updates instanceof ArrayList<UpdateChecker>) {
             LibuLib.updates.add(update);
-            LibuLib.logger.info("[LibuLib] Found compatibility with %d".formatted(update.getMod().name));
+            LibuLib.logger.info("[LibuLib] Found compatibility with " + update.getMod().name);
         } else {
             LibuLib.logger.error("Why the fuck is my arraylist not good");
         }

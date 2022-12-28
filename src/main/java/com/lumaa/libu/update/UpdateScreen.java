@@ -15,12 +15,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class UpdateScreen extends Screen {
+    private final Screen parent;
     private final ModrinthMod mod;
     private final Text notice;
     private MultilineText noticeLines;
 
-    public UpdateScreen(ModrinthMod mod, MutableText title, Text notice) throws IOException {
+    public UpdateScreen(Screen parent, ModrinthMod mod, MutableText title, Text notice) throws IOException {
         super(title.formatted(Formatting.BOLD));
+        this.parent = parent;
         this.mod = mod;
         this.notice = notice;
     }
@@ -37,7 +39,7 @@ public class UpdateScreen extends Screen {
             mod.openVersion(mod.getChecker().getString("version_number"));
         }));
         this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j + 30, 150, 20, ScreenTexts.NO, (button) -> {
-            this.client.setScreen(new TitleScreen());
+            this.client.setScreen(parent);
         }));
     }
 
