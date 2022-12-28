@@ -14,7 +14,6 @@ repositories {
 	mavenCentral()
 	maven {
 		url "https://jitpack.io"
-		credentials { username authToken }
 	}
 }
 
@@ -23,7 +22,6 @@ allprojects {
 		mavenCentral()
 		maven {
 			url "https://jitpack.io"
-			credentials { username authToken }
 		}
 	}
 }
