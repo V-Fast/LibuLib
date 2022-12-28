@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class LibuLib implements ClientModInitializer {
     public static final Logger logger = LoggerFactory.getLogger("libu");
     private static final String ID = "libu";
 
-    private static List<UpdateChecker> updates = Arrays.asList();
+    private static ArrayList<UpdateChecker> updates = new ArrayList<UpdateChecker>();
     public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libulib", "Dev"));
     public static final String version = "Dev";
     public static final boolean published = false;
@@ -41,11 +42,11 @@ public class LibuLib implements ClientModInitializer {
     }
 
     public static void addUpdate(UpdateChecker update) {
-        if (updates instanceof List<UpdateChecker>) {
+        if (updates instanceof ArrayList<UpdateChecker>) {
             LibuLib.updates.add(update);
             LibuLib.logger.info("[LibuLib] Found compatibility with %d".formatted(update.getMod().name));
         } else {
-            LibuLib.logger.error("Why the fuck is my list not good");
+            LibuLib.logger.error("Why the fuck is my arraylist not good");
         }
     }
 }
