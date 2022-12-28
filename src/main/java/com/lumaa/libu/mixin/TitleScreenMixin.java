@@ -33,7 +33,7 @@ public class TitleScreenMixin extends Screen {
                             LibuLib.logger.info(LibuLib.updateChecker.getMod().name + "'s Developer version prevented an update.");
                         } else {
                             update.setShown(true);
-                            this.client.setScreen(new UpdateScreen(this.client.currentScreen, LibuLib.updateChecker.getMod(), Text.translatable("update.libulib.title".formatted(update.getMod().name)), Text.translatable("update.libulib.description".formatted(update.getMod().name, update.getMod().versionId, update.getString("version_number"), update.getMod().name))));
+                            this.client.setScreen(new UpdateScreen(this.client.currentScreen, LibuLib.updateChecker.getMod(), Text.translatable("update.libulib.title", update.getMod().name), Text.translatable("update.libulib.description", update.getMod().name, update.getMod().versionId, update.getString("version_number"), update.getMod().name)));
                         }
                     }
                 } catch (IOException e) {
