@@ -5,6 +5,7 @@ import com.lumaa.libu.update.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,22 +18,24 @@ public class LibuLib implements ClientModInitializer {
     private static final String ID = "libu";
 
     private static ArrayList<UpdateChecker> updates = new ArrayList<UpdateChecker>();
-    //public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libulib", "Dev"));
-    public static final String version = "Dev";
-    public static final boolean published = false;
+    private static final String versionId = FabricLoader.getInstance()
+            .getModContainer("libu")
+            .orElseThrow()
+            .getMetadata()
+            .getVersion()
+            .getFriendlyString();
+    public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libu", versionId));
 
     @Override
     public void onInitializeClient() {
-        logger.info("LibuLib has awaken");
+        logger.info("[LibuLib] has awakened");
 
-        /*if (published) {
-            try {
-                updateChecker.findLatestVersion();
-                addUpdate(updateChecker);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
+        try {
+            updateChecker.findLatestVersion();
+            addUpdate(updateChecker);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<UpdateChecker> getUpdates() {
