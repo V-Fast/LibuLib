@@ -32,7 +32,7 @@ public class LibuLib implements ClientModInitializer {
 
         try {
             updateChecker.findLatestVersion();
-            addUpdate(updateChecker);
+            LibuLib.updates.add(updateChecker); // add independently to avoid log
         } catch (IOException e) {
             e.printStackTrace();
         }
