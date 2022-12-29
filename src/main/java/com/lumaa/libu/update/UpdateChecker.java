@@ -33,8 +33,6 @@ public class UpdateChecker {
             return modObject;
         }
 
-        LibuLib.logger.info("[LibuLib x %s] Checking updates...".formatted(this.mod.name));
-
         URL modrinthUrl = new URL("https://api.modrinth.com/v2/project/%s/version".formatted(this.mod.slang));
 
         HttpURLConnection connection = (HttpURLConnection) modrinthUrl.openConnection();
@@ -48,13 +46,6 @@ public class UpdateChecker {
         }
 
         modObject = JsonParser.parseString(sb.toString()).getAsJsonArray().get(0).getAsJsonObject();
-
-        if (this.mod.versionId != this.getString("version_number")) {
-            LibuLib.logger.info("[LibuLib x %s] Update found!".formatted(this.mod.name));
-        } else {
-            LibuLib.logger.info("[LibuLib x %s] No updates were found".formatted(this.mod.name));
-        }
-
 
         return modObject;
     }
