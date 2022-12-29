@@ -35,10 +35,10 @@ public class UpdateScreen extends Screen {
         Objects.requireNonNull(this.textRenderer);
         int i = var10000 * 9;
         int j = MathHelper.clamp(90 + i + 12, this.height / 6 + 96, this.height - 24);
-        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j, 150, 20, ScreenTexts.YES, (button) -> {
+        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j + 15, 150, 20, ScreenTexts.YES, (button) -> {
             mod.openVersion(mod.getChecker().getString("version_number"));
         }));
-        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j + 30, 150, 20, ScreenTexts.NO, (button) -> {
+        this.addDrawableChild(new ButtonWidget((this.width - 150) / 2, j + 45, 150, 20, ScreenTexts.NO, (button) -> {
             this.client.setScreen(parent);
         }));
     }
