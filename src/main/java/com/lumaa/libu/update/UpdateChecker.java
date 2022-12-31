@@ -19,6 +19,11 @@ public class UpdateChecker {
     private static JsonObject modObject;
     private static boolean shown = false;
 
+    /**
+     * Create an UpdateChecker using your <a href="https://modrinth.com">Modrinth</a> project
+     * @param mod Your <a href="https://modrinth.com">Modrinth</a> project
+     * @see com.lumaa.libu.update.ModrinthMod#ModrinthMod(String, String, String)
+     */
     public UpdateChecker(ModrinthMod mod) {
         this.mod = mod;
         this.mod.setChecker(this);

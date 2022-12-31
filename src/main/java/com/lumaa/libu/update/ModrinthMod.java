@@ -2,6 +2,7 @@ package com.lumaa.libu.update;
 
 import net.minecraft.util.Util;
 
+/**A <a href="https://modrinth.com">Modrinth</a> project*/
 public class ModrinthMod {
     public String name;
     public String slang;
@@ -9,7 +10,7 @@ public class ModrinthMod {
     private UpdateChecker checker;
 
     /**
-     * Identify a Modrinth Mod
+     * Identify a <a href="https://modrinth.com">Modrinth</a> Mod
      * @param name The name of the mod
      * @param slang The slang of the mod
      * @param versionId The current version identifier of the mod
@@ -21,14 +22,14 @@ public class ModrinthMod {
     }
 
     /**
-     * Opens the Modrinth project of the mod
+     * Opens the <a href="https://modrinth.com">Modrinth</a> project of the mod
      */
     public void openMod() {
         Util.getOperatingSystem().open("https://modrinth.com/mod/%s".formatted(this.slang));
     }
 
     /**
-     * Opens the Modrinth project in a specific version
+     * Opens the <a href="https://modrinth.com">Modrinth</a> project in a specific version
      * @param versionId The version identifier
      */
     public void openVersion(String versionId) {
@@ -36,7 +37,7 @@ public class ModrinthMod {
     }
 
     /**
-     * Opens the Modrinth project in the current version
+     * Opens the <a href="https://modrinth.com">Modrinth</a> project in the current version
      */
     public void openCurrentVersion() {
         openVersion(this.versionId);

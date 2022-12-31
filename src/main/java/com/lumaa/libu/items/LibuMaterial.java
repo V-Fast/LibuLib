@@ -3,6 +3,9 @@ package com.lumaa.libu.items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
+/**
+ * @deprecated Do not use
+ */
 public class LibuMaterial implements ToolMaterial {
     private int durability = 0;
     private float attackDamage = 0;
