@@ -54,3 +54,5 @@ dependencies {
     modImplementation "maven.modrinth:libu:${libu_version}"
 }
 ```
+
+Use developer versions at your own risk
