@@ -1,6 +1,6 @@
 # LibuLib
 [![](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)  
-**LibuLib** is a library mod made for all the mods by Lumaa
+**LibuLib** is a library mod made for all the mods by myself
 
 **The wiki is coming.** You can look at [The Backrooms Mod's GitHub](https://github.com/u-lumaa/BackroomsMod) to find out how to use **LibuLib** in your mod.  
 You can also use it in your mod by doing the following (JitPack):
