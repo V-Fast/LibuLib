@@ -7,10 +7,11 @@
 [![JitPack](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)
 
 </div></center>
-**LibuLib** is a library mod made for all the mods by myself
 
-**The wiki is coming.** You can look at [The Backrooms Mod's GitHub](https://github.com/u-lumaa/BackroomsMod) to find out how to use **LibuLib** in your mod.  
-You can also use it in your mod by doing the following (JitPack):
+**LibuLib** is a library mod made for all the mods by myself  
+Wiki: https://github.com/u-lumaa/LibuLib/wiki
+
+Use it in your mod by doing the following (JitPack):
 
 **gradle.properties**:
 ```properties
@@ -31,6 +32,8 @@ dependencies {
 	modImplementation "com.github.u-lumaa:LibuLib:${libu_version}"
 }
 ```
+
+**Use developer versions at your own risk**
 * * *
 
 You can use it in your mod by doing the following (Modrinth Maven):
@@ -61,5 +64,3 @@ dependencies {
     modImplementation "maven.modrinth:libu:${libu_version}"
 }
 ```
-
-Use developer versions at your own risk
