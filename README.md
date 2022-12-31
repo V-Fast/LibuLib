@@ -1,5 +1,12 @@
+
+<center><div align="center">
+
 # LibuLib
-[![](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)  
+
+![Fabric only](https://raw.githubusercontent.com/u-lumaa/u-lumaa/main/assets/fabric-banner.png)  
+[![JitPack](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)
+
+</div></center>
 **LibuLib** is a library mod made for all the mods by myself
 
 **The wiki is coming.** You can look at [The Backrooms Mod's GitHub](https://github.com/u-lumaa/BackroomsMod) to find out how to use **LibuLib** in your mod.  
