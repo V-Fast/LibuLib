@@ -4,6 +4,8 @@
 
 ![Fabric only](https://raw.githubusercontent.com/u-lumaa/u-lumaa/main/assets/fabric-banner.png)  
 [![JitPack](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/libu?label=Modrinth&logo=modrinth)
+![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/libu?label=Minecraft%20Version)
 
 </div></center>
 
