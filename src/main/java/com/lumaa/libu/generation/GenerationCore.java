@@ -1,0 +1,165 @@
+package com.lumaa.libu.generation;
+
+import com.lumaa.libu.LibuLib;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+
+import java.util.List;
+
+public class GenerationCore {
+    private static World world;
+
+    // normal blocks
+    private static Block FLOOR = null;
+    private static Block WALLS = null;
+    private static Block ROOF = null;
+
+    // variants
+    private static VarientType hasVarients = VarientType.NONE;
+    private static List<Block> FLOOR_VARIANTS = null;
+    private static List<Block> WALLS_VARIANTS = null;
+    private static List<Block> ROOF_VARIANTS = null;
+
+    // sizes
+    private static int sizeX = 16;
+    private static int sizeY = 3;
+    private static int sizeZ = 16;
+    private static final int maxSize = 150;
+
+    // types
+    private static StructureType type = StructureType.BLOCKY;
+    private static ShapeType shape = ShapeType.SQUARE;
+
+    public GenerationCore(Block floor, Block walls, Block roof) {
+        FLOOR = floor;
+        WALLS = walls;
+        ROOF = roof;
+    }
+
+    public void setVariants(List<Block> floor, List<Block> walls, List<Block> roof) {
+        // force devs to put their normal blocks in their variants list
+        if (floor.contains(FLOOR) && walls.contains(WALLS) && roof.contains(ROOF)) {
+            FLOOR_VARIANTS = floor;
+            WALLS_VARIANTS = walls;
+            ROOF_VARIANTS = roof;
+            hasVarients = VarientType.ALL;
+        } else {
+            LibuLib.logger.error("Variant list must contain their normal blocks");
+        }
+    }
+
+    public static void setFloorVariants(List<Block> floorVariants) {
+        if (!floorVariants.contains(FLOOR)) LibuLib.logger.error("Floor Variant list must contain normal floor block");
+        FLOOR_VARIANTS = floorVariants;
+        hasVarients = VarientType.FLOOR;
+    }
+
+    public static void setWallsVariants(List<Block> wallsVariants) {
+        if (!wallsVariants.contains(WALLS)) LibuLib.logger.error("Walls Variant list must contain normal walls block");
+        WALLS_VARIANTS = wallsVariants;
+        hasVarients = VarientType.WALLS;
+    }
+
+    public static void setRoofVariants(List<Block> roofVariants) {
+        if (!roofVariants.contains(ROOF)) LibuLib.logger.error("Roof Variant list must contain normal roof block");
+        ROOF_VARIANTS = roofVariants;
+        hasVarients = VarientType.ROOF;
+    }
+
+    public static void setSize(int x, int z) {
+        GenerationCore.sizeX = MathHelper.clamp(x, 2, maxSize);
+        GenerationCore.sizeZ = MathHelper.clamp(z, 2, maxSize);
+    }
+
+    public static void setHeight(int height) {
+        GenerationCore.sizeY = height;
+    }
+
+    public static void setShape(ShapeType shape) {
+        if (sizeX != sizeZ && shape == ShapeType.SQUARE) {
+            sizeZ = sizeX;
+            LibuLib.logger.warn("Size of structure changed according to shape");
+        }
+        GenerationCore.shape = shape;
+    }
+
+    public static void setType(StructureType type) {
+        GenerationCore.type = type;
+        if (type == StructureType.MODERN) {
+            LibuLib.logger.error("MODERN Structure Type is not available yet. Set to BLOCKY");
+            GenerationCore.type = StructureType.BLOCKY;
+        }
+    }
+
+    private void fixVars() {
+        if (FLOOR_VARIANTS != null && WALLS_VARIANTS != null && ROOF_VARIANTS != null) {
+            hasVarients = VarientType.ALL;
+        } else if (FLOOR_VARIANTS != null && WALLS_VARIANTS == null && ROOF_VARIANTS == null) {
+            hasVarients = VarientType.FLOOR;
+        } else if (FLOOR_VARIANTS == null && WALLS_VARIANTS != null && ROOF_VARIANTS == null) {
+            hasVarients = VarientType.WALLS;
+        } else if (FLOOR_VARIANTS == null && WALLS_VARIANTS == null && ROOF_VARIANTS != null) {
+            hasVarients = VarientType.ROOF;
+        }
+    }
+
+    public void generate(World world, BlockPos origin) {
+        fixVars();
+
+        // put block on origin
+        GenerationCore.world = world;
+        world.setBlockState(origin, Blocks.RED_WOOL.getDefaultState());
+
+        // default floor
+        fill(FLOOR.getDefaultState(), origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
+
+        // default walls
+        if (type == StructureType.BLOCKY) {
+            fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, 0), origin.add(sizeX / 2 + 1, sizeY, 0));
+            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, -sizeZ / 2), origin.add(-sizeX / 2, sizeY, sizeZ / 2));
+            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, sizeZ / 2), origin.add(-sizeX / 2, sizeY, sizeZ / 2));
+            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, sizeZ / 2), origin.add(-sizeX / 2, sizeY, -sizeZ / 2));
+        }
+
+        // default roof
+        fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY, -sizeZ / 2), origin.add(sizeX / 2, sizeY, sizeZ / 2));
+    }
+
+    private void fill(BlockState block, BlockPos start, BlockPos end) {
+        int width = end.getX() - start.getX();
+        int depth = end.getZ() - start.getZ();
+        int height = end.getY() - start.getY();
+
+        if (width == 0) {
+            width = 1;
+        } else if (height == 0) {
+            height = 1;
+        } else if (depth == 0) {
+            depth = 1;
+        }
+
+        int total = width * depth * height;
+
+        for (int t = 0; t < total; t++) {
+            int i = t % width;
+            int j = t / (width * depth);
+            int k = (t / width) % depth;
+            BlockPos blockPos = start.add(i, j, k);
+            if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() && world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState()) {
+                world.setBlockState(blockPos, block);
+            }
+        }
+    }
+
+    private enum VarientType {
+        NONE,
+        ALL,
+        FLOOR,
+        WALLS,
+        ROOF
+    }
+}
