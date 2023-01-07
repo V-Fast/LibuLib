@@ -42,7 +42,6 @@ public class LibuProjectile extends ThrownItemEntity {
             this.world.sendEntityStatus(this, (byte)3);
             this.discard();
         }
-
     }
 
     @Override
