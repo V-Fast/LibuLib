@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -52,34 +53,34 @@ public class GenerationCore {
         }
     }
 
-    public static void setFloorVariants(List<Block> floorVariants) {
+    public void setFloorVariants(List<Block> floorVariants) {
         if (!floorVariants.contains(FLOOR)) LibuLib.logger.error("Floor Variant list must contain normal floor block");
         FLOOR_VARIANTS = floorVariants;
         hasVarients = VarientType.FLOOR;
     }
 
-    public static void setWallsVariants(List<Block> wallsVariants) {
+    public void setWallsVariants(List<Block> wallsVariants) {
         if (!wallsVariants.contains(WALLS)) LibuLib.logger.error("Walls Variant list must contain normal walls block");
         WALLS_VARIANTS = wallsVariants;
         hasVarients = VarientType.WALLS;
     }
 
-    public static void setRoofVariants(List<Block> roofVariants) {
+    public void setRoofVariants(List<Block> roofVariants) {
         if (!roofVariants.contains(ROOF)) LibuLib.logger.error("Roof Variant list must contain normal roof block");
         ROOF_VARIANTS = roofVariants;
         hasVarients = VarientType.ROOF;
     }
 
-    public static void setSize(int x, int z) {
+    public void setSize(int x, int z) {
         GenerationCore.sizeX = MathHelper.clamp(x, 2, maxSize);
         GenerationCore.sizeZ = MathHelper.clamp(z, 2, maxSize);
     }
 
-    public static void setHeight(int height) {
+    public void setHeight(int height) {
         GenerationCore.sizeY = height;
     }
 
-    public static void setShape(ShapeType shape) {
+    public void setShape(ShapeType shape) {
         if (sizeX != sizeZ && shape == ShapeType.SQUARE) {
             sizeZ = sizeX;
             LibuLib.logger.warn("Size of structure changed according to shape");
@@ -87,7 +88,7 @@ public class GenerationCore {
         GenerationCore.shape = shape;
     }
 
-    public static void setType(StructureType type) {
+    public void setType(StructureType type) {
         GenerationCore.type = type;
         if (type == StructureType.MODERN) {
             LibuLib.logger.error("MODERN Structure Type is not available yet. Set to BLOCKY");
@@ -95,7 +96,7 @@ public class GenerationCore {
         }
     }
 
-    private void fixVars() {
+    private static void fixVars() {
         if (FLOOR_VARIANTS != null && WALLS_VARIANTS != null && ROOF_VARIANTS != null) {
             hasVarients = VarientType.ALL;
         } else if (FLOOR_VARIANTS != null && WALLS_VARIANTS == null && ROOF_VARIANTS == null) {
@@ -109,27 +110,22 @@ public class GenerationCore {
 
     public void generate(World world, BlockPos origin) {
         fixVars();
-
-        // put block on origin
         GenerationCore.world = world;
-        world.setBlockState(origin, Blocks.RED_WOOL.getDefaultState());
+
+        // default walls
+        if (type == StructureType.BLOCKY) {
+            fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
+            fill(Blocks.AIR.getDefaultState(), origin.add(-sizeX / 2, 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
+        }
 
         // default floor
         fill(FLOOR.getDefaultState(), origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
 
-        // default walls
-        if (type == StructureType.BLOCKY) {
-            fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, 0), origin.add(sizeX / 2 + 1, sizeY, 0));
-            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, -sizeZ / 2), origin.add(-sizeX / 2, sizeY, sizeZ / 2));
-            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, sizeZ / 2), origin.add(-sizeX / 2, sizeY, sizeZ / 2));
-            fill(WALLS.getDefaultState(), origin.add(sizeX / 2, 0, sizeZ / 2), origin.add(-sizeX / 2, sizeY, -sizeZ / 2));
-        }
-
         // default roof
-        fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY, -sizeZ / 2), origin.add(sizeX / 2, sizeY, sizeZ / 2));
+        fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
     }
 
-    private void fill(BlockState block, BlockPos start, BlockPos end) {
+    private void fill(BlockState block, BlockPos start, BlockPos end, boolean overwrite) {
         int width = end.getX() - start.getX();
         int depth = end.getZ() - start.getZ();
         int height = end.getY() - start.getY();
@@ -149,10 +145,16 @@ public class GenerationCore {
             int j = t / (width * depth);
             int k = (t / width) % depth;
             BlockPos blockPos = start.add(i, j, k);
-            if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() && world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState()) {
+            if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() && world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
+                world.setBlockState(blockPos, block);
+            } else if (overwrite == true) {
                 world.setBlockState(blockPos, block);
             }
         }
+    }
+
+    private void fill(BlockState block, BlockPos start, BlockPos end) {
+        fill(block, start, end, true);
     }
 
     private enum VarientType {
