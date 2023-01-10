@@ -5,7 +5,8 @@
 ![Fabric only](https://raw.githubusercontent.com/u-lumaa/u-lumaa/main/assets/fabric-banner.png)  
 [![JitPack](https://jitpack.io/v/u-lumaa/LibuLib.svg)](https://jitpack.io/#u-lumaa/LibuLib)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/libu?label=Modrinth&logo=modrinth)
-![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/libu?label=Minecraft%20Version)
+![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/libu?label=Minecraft%20Version)  
+[![Discord Server](https://img.shields.io/discord/1033451342984908900?label=Support%20Discord&logo=discord)](https://discord.gg/Rqpn3C7yR5)
 
 </div></center>
 
