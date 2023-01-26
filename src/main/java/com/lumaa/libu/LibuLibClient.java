@@ -14,10 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public class LibuLib implements ClientModInitializer {
+public class LibuLibClient implements ClientModInitializer {
     public static final Logger logger = LoggerFactory.getLogger("libu");
     private static final String ID = "libu";
 
@@ -29,6 +28,7 @@ public class LibuLib implements ClientModInitializer {
             .getVersion()
             .getFriendlyString();
     public static final UpdateChecker updateChecker = new UpdateChecker(new ModrinthMod("LibuLib", "libu", versionId));
+    private static boolean updateDisplayed = false;
 
     @Override
     public void onInitializeClient() {
@@ -46,24 +46,30 @@ public class LibuLib implements ClientModInitializer {
         return updates;
     }
 
+    /**
+     * Add an update to the update queue
+     * @param update An {@link UpdateChecker}
+     */
     public static void addUpdate(UpdateChecker update) {
-        if (updates instanceof ArrayList<UpdateChecker> && !updates.contains(update)) {
-            LibuLib.updates.add(update);
-            LibuLib.logger.info("[LibuLib] Found compatibility with " + update.getMod().name);
+        if (updates != null && !updates.contains(update)) {
+            LibuLibClient.updates.add(update);
+            LibuLibClient.logger.info("[LibuLib] Found compatibility with " + update.getMod().name);
         }
     }
 
     /**
-     * Displays all the added updates if there are
-     * @see com.lumaa.libu.LibuLib#addUpdate(UpdateChecker)
+     * Displays using {@link UpdateScreen} all the required updates if there are
+     * @see LibuLibClient#addUpdate(UpdateChecker)
+     * @see LibuLibClient#displayUpdates()
      */
     public static void displayUpdates() {
+        updateDisplayed = true;
         if (getUpdates().size() > 0) {
             getUpdates().forEach(update -> {
                 try {
                     if (!update.getString("version_number").equals(update.getMod().versionId) && !update.isShown()) {
                         MinecraftClient client = MinecraftClient.getInstance();
-                        if (update.getMod().versionId.toLowerCase(Locale.ROOT).trim().equals("dev")) {
+                        if (update.getMod().versionId.toLowerCase().trim().equals("dev")) {
                             update.setShown(true);
                             logger.info(update.getMod().name + "'s Developer version prevented an update.");
                         } else {
@@ -78,5 +84,37 @@ public class LibuLib implements ClientModInitializer {
         } else {
             logger.error("[LibuLib] No mods in UpdateChecker list");
         }
+    }
+
+    /**
+     * Prints all the required updates if there are
+     * @see LibuLibClient#addUpdate(UpdateChecker)
+     * @see LibuLibClient#displayUpdates()
+     */
+    public static void printUpdates() {
+        updateDisplayed = true;
+        if (getUpdates().size() > 0) {
+            getUpdates().forEach(update -> {
+                if (!update.getString("version_number").equals(update.getMod().versionId) && !update.isShown()) {
+                    if (update.getMod().versionId.toLowerCase().trim().equals("dev")) {
+                        update.setShown(true);
+                        logger.info(update.getMod().name + "'s Developer version prevented an update.");
+                    } else {
+                        update.setShown(true);
+                        logger.warn("%s requires an update for version %s!".formatted(update.getString(update.getMod().name), update.getString("version_number")));
+                    }
+                }
+            });
+        } else {
+            logger.error("[LibuLib] No mods in UpdateChecker list");
+        }
+    }
+
+    /**
+     * Returns a boolean if the {@link LibuLibClient#displayUpdates()} has been called before or not
+     * @return Boolean if updates were displayed
+     */
+    public static boolean hasUpdateDisplayed() {
+        return updateDisplayed;
     }
 }
