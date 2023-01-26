@@ -14,25 +14,25 @@ public class GenerationCore {
     private static World world;
 
     // normal blocks
-    private static Block FLOOR = null;
-    private static Block WALLS = null;
-    private static Block ROOF = null;
+    public static Block FLOOR = null;
+    public static Block WALLS = null;
+    public static Block ROOF = null;
 
     // variants
-    private static VarientType hasVarients = VarientType.NONE;
-    private static List<Block> FLOOR_VARIANTS = null;
-    private static List<Block> WALLS_VARIANTS = null;
-    private static List<Block> ROOF_VARIANTS = null;
+    public static VarientType hasVarients = VarientType.NONE;
+    public static List<Block> FLOOR_VARIANTS = null;
+    public static List<Block> WALLS_VARIANTS = null;
+    public static List<Block> ROOF_VARIANTS = null;
 
     // sizes
-    private static int sizeX = 16;
-    private static int sizeY = 3;
-    private static int sizeZ = 16;
-    private static final int maxSize = 150;
+    public static int sizeX = 16;
+    public static int sizeY = 3;
+    public static int sizeZ = 16;
+    public static final int maxSize = 150;
 
     // types
     private static StructureType type = StructureType.BLOCKY;
-    private static ShapeType shape = ShapeType.SQUARE;
+    private static ShapeType shape = ShapeType.BOX;
 
     public GenerationCore(Block floor, Block walls, Block roof) {
         FLOOR = floor;
@@ -80,11 +80,15 @@ public class GenerationCore {
     }
 
     public void setShape(ShapeType shape) {
-        if (sizeX != sizeZ && shape == ShapeType.SQUARE) {
+        if (sizeX != sizeZ && shape == ShapeType.BOX) {
             sizeZ = sizeX;
             LibuLibClient.logger.warn("Size of structure changed according to shape");
         }
         GenerationCore.shape = shape;
+    }
+
+    public static ShapeType getShape() {
+        return shape;
     }
 
     public void setType(StructureType type) {
@@ -93,6 +97,10 @@ public class GenerationCore {
             LibuLibClient.logger.error("MODERN Structure Type is not available yet. Set to BLOCKY");
             GenerationCore.type = StructureType.BLOCKY;
         }
+    }
+
+    public static StructureType getType() {
+        return type;
     }
 
     private static void fixVars() {
@@ -110,33 +118,9 @@ public class GenerationCore {
     public void generate(World world, BlockPos origin) {
         fixVars();
         GenerationCore.world = world;
-
-        // walls
-        if (type == StructureType.BLOCKY && shape == ShapeType.SQUARE) {
-            if (hasVarients == VarientType.WALLS || hasVarients == VarientType.ALL) {
-                fillVarients(WALLS, WALLS_VARIANTS, origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
-            } else {
-                fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
-            }
-            fill(Blocks.AIR.getDefaultState(), origin.add(-sizeX / 2, 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
-        }
-
-        // floor
-        if (hasVarients == VarientType.FLOOR || hasVarients == VarientType.ALL) {
-            fillVarients(FLOOR, FLOOR_VARIANTS, origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
-        } else {
-            fill(FLOOR.getDefaultState(), origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
-        }
-
-        // roof
-        if (hasVarients == VarientType.FLOOR || hasVarients == VarientType.ALL) {
-            fillVarients(ROOF, ROOF_VARIANTS, origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
-        } else {
-            fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
-        }
     }
 
-    private void fill(BlockState block, BlockPos start, BlockPos end, boolean overwrite) {
+    public void fill(BlockState block, BlockPos start, BlockPos end, boolean overwrite) {
         int width = end.getX() - start.getX();
         int depth = end.getZ() - start.getZ();
         int height = end.getY() - start.getY();
@@ -164,11 +148,11 @@ public class GenerationCore {
         }
     }
 
-    private void fill(BlockState block, BlockPos start, BlockPos end) {
+    public void fill(BlockState block, BlockPos start, BlockPos end) {
         fill(block, start, end, true);
     }
 
-    private void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite) {
+    public void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite) {
         int width = end.getX() - start.getX();
         int depth = end.getZ() - start.getZ();
         int height = end.getY() - start.getY();
@@ -192,11 +176,11 @@ public class GenerationCore {
             // one of five change of setting a variant block
             double hasVariant = Math.random() * 5;
             if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
-                BlockState blockPlace = normalBlock.getDefaultState();
                 if (hasVariant == 0) {
-                    blockPlace = variants.get((int) (Math.random() * (variants.size() - 1))).getDefaultState();
+                    world.setBlockState(blockPos, variants.get((int) (Math.random() * (variants.size() - 1))).getDefaultState());
+                } else {
+                    world.setBlockState(blockPos, normalBlock.getDefaultState());
                 }
-                world.setBlockState(blockPos, blockPlace);
             } else if (overwrite == true) {
                 BlockState blockPlace = normalBlock.getDefaultState();
                 if (hasVariant == 0) {
@@ -207,15 +191,26 @@ public class GenerationCore {
         }
     }
 
-    private void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end) {
+    public void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end) {
         fillVarients(normalBlock, variants, start, end, true);
     }
 
-    private enum VarientType {
+    public static World getWorld() {
+        return world;
+    }
+
+    public enum VarientType {
         NONE,
         ALL,
         FLOOR,
         WALLS,
         ROOF
+    }
+
+    public enum Orientation {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
     }
 }

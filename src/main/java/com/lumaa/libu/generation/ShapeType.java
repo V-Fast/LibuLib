@@ -1,8 +1,8 @@
 package com.lumaa.libu.generation;
 
 public enum ShapeType {
-    /** Makes a square structure */
-    SQUARE,
+    /** Makes a box structure */
+    BOX,
 
     /** Makes a rectangle structure */
     RECTANGLE,

@@ -8,7 +8,6 @@ public enum StructureType {
     NORMAL,
 
     /** Generates a very detailed structure
-     * @deprecated Does not work
      */
     MODERN
 }
