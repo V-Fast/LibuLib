@@ -1,6 +1,6 @@
 package com.lumaa.libu.generation;
 
-import com.lumaa.libu.LibuLib;
+import com.lumaa.libu.LibuLibClient;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -48,24 +48,24 @@ public class GenerationCore {
             ROOF_VARIANTS = roof;
             hasVarients = VarientType.ALL;
         } else {
-            LibuLib.logger.error("Variant lists must not contain their normal blocks");
+            LibuLibClient.logger.error("Variant lists must not contain their normal blocks");
         }
     }
 
     public void setFloorVariants(List<Block> floorVariants) {
-        if (floorVariants.contains(FLOOR)) LibuLib.logger.error("Floor Variant list must not contain normal floor block");
+        if (floorVariants.contains(FLOOR)) LibuLibClient.logger.error("Floor Variant list must not contain normal floor block");
         FLOOR_VARIANTS = floorVariants;
         hasVarients = VarientType.FLOOR;
     }
 
     public void setWallsVariants(List<Block> wallsVariants) {
-        if (wallsVariants.contains(WALLS)) LibuLib.logger.error("Walls Variant list must not contain normal walls block");
+        if (wallsVariants.contains(WALLS)) LibuLibClient.logger.error("Walls Variant list must not contain normal walls block");
         WALLS_VARIANTS = wallsVariants;
         hasVarients = VarientType.WALLS;
     }
 
     public void setRoofVariants(List<Block> roofVariants) {
-        if (roofVariants.contains(ROOF)) LibuLib.logger.error("Roof Variant list must not contain normal roof block");
+        if (roofVariants.contains(ROOF)) LibuLibClient.logger.error("Roof Variant list must not contain normal roof block");
         ROOF_VARIANTS = roofVariants;
         hasVarients = VarientType.ROOF;
     }
@@ -82,7 +82,7 @@ public class GenerationCore {
     public void setShape(ShapeType shape) {
         if (sizeX != sizeZ && shape == ShapeType.SQUARE) {
             sizeZ = sizeX;
-            LibuLib.logger.warn("Size of structure changed according to shape");
+            LibuLibClient.logger.warn("Size of structure changed according to shape");
         }
         GenerationCore.shape = shape;
     }
@@ -90,7 +90,7 @@ public class GenerationCore {
     public void setType(StructureType type) {
         GenerationCore.type = type;
         if (type == StructureType.MODERN) {
-            LibuLib.logger.error("MODERN Structure Type is not available yet. Set to BLOCKY");
+            LibuLibClient.logger.error("MODERN Structure Type is not available yet. Set to BLOCKY");
             GenerationCore.type = StructureType.BLOCKY;
         }
     }
