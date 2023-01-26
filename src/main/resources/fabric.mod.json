@@ -4,12 +4,12 @@
   "version": "${version}",
 
   "name": "Libu",
-  "description": "Lumaa Library",
+  "description": "Library made for developers that doesn't like writing the same code over and over again, just like me, Lumaa.",
   "authors": [
     "_Lumaa_"
   ],
   "contact": {
-    "homepage": "https://lumination.brebond.com/"
+    "homepage": "https://lumaa.brebond.com/"
   },
 
   "license": "MIT",
