@@ -7,9 +7,14 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 
 @Environment(EnvType.SERVER)
-public class ServerEvents implements ServerTickEvents.StartTick {
+public class LibuServerTickEvents implements ServerTickEvents.StartTick, ServerTickEvents.EndTick {
     @Override
     public void onStartTick(MinecraftServer server) {
+        LibuLibServer.printUpdates();
+    }
+
+    @Override
+    public void onEndTick(MinecraftServer server) {
         LibuLibServer.printUpdates();
     }
 }

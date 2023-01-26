@@ -6,6 +6,8 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,29 @@ public class LibuLibServer implements DedicatedServerModInitializer {
                     } else {
                         update.setShown(true);
                         logger.warn("%s requires an update for version %s!".formatted(update.getString(update.getMod().name), update.getString("version_number")));
+                    }
+                }
+            });
+        } else {
+            logger.error("[LibuLib] No mods in UpdateChecker list");
+        }
+    }
+
+    /**
+     * Send a message to a player all the required updates if there are
+     */
+    public static void sendUpdates(ServerPlayerEntity player) {
+        if (updates.size() > 0) {
+            updates.forEach(update -> {
+                if (!update.getString("version_number").equals(update.getMod().versionId) && !update.isShown()) {
+                    if (update.getMod().versionId.toLowerCase().trim().equals("dev")) {
+                        update.setShown(true);
+                        Text a = Text.literal("[LibuLib] This server uses a developer version of %s.".formatted(update.getMod().name));
+                        player.sendMessageToClient(a.getWithStyle(a.getStyle().withColor(Color.brand)).get(0), false);
+                    } else {
+                        update.setShown(true);
+                        Text b = Text.literal("[LibuLib] This server uses an outdated version of %s.".formatted(update.getMod().name));
+                        player.sendMessageToClient(b.getWithStyle(b.getStyle().withColor(Color.brand)).get(0), false);
                     }
                 }
             });
