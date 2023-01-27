@@ -1,2 +1,1 @@
-*None*
-It's a library itself.
+Fabric API - 0.70.0+
