@@ -43,10 +43,16 @@ public class MazeCore extends GenerationCore {
         } else {
             fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
         }
+
+        // remove random wall and continue
+        fillRandomWall(origin, Blocks.AIR);
     }
 
-    private void setRandomWall(BlockPos origin, Block block) {
-        Orientation removeWallOrientation = Orientation.values()[(int) (Math.random() * Orientation.values().length)];
+    /**
+     * Fills one of the 4 walls
+     */
+    private Orientation fillRandomWall(BlockPos origin, Block block) {
+        Orientation removeWallOrientation = Orientation.values()[(int) (Math.random() * Orientation.values().length - 1)];
         BlockPos start; // from origin
         BlockPos end; // from origin
 
@@ -59,6 +65,16 @@ public class MazeCore extends GenerationCore {
                 start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
                 end = origin.add(sizeX / 2, sizeY + 1, -sizeZ / 2);
             }
+            case NORTH -> {
+                start = origin.add(sizeX / 2, 0, -sizeZ / 2);
+                end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
+            }
+            case SOUTH -> {
+                start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
+                end = origin.add(-sizeX / 2, sizeY + 1, sizeZ / 2);
+            }
         }
+
+        return removeWallOrientation;
     }
 }
