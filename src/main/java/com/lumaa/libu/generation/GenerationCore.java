@@ -115,6 +115,11 @@ public class GenerationCore {
         }
     }
 
+    /**
+     * Generate the structure
+     * @param world The world to generate the structure
+     * @param origin The origin point
+     */
     public void generate(World world, BlockPos origin) {
         fixVars();
         GenerationCore.world = world;
