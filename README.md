@@ -35,7 +35,7 @@ dependencies {
 }
 ```
 
-**Use developer versions at your own risk**
+**I will not support people using developer versions**
 * * *
 
 You can use it in your mod by doing the following (Modrinth Maven):
