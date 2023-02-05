@@ -7,8 +7,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.joml.Vector3d;
 
 import java.util.List;
+import java.util.Random;
 
 public class GenerationCore {
     private static World world;
@@ -41,7 +43,7 @@ public class GenerationCore {
     }
 
     public void setVariants(List<Block> floor, List<Block> walls, List<Block> roof) {
-        // force devs to put their normal blocks in their variants list
+        // force devs to NOT put their normal blocks in their variants list
         if (!floor.contains(FLOOR) && !walls.contains(WALLS) && !roof.contains(ROOF)) {
             FLOOR_VARIANTS = floor;
             WALLS_VARIANTS = walls;
@@ -87,7 +89,7 @@ public class GenerationCore {
         GenerationCore.shape = shape;
     }
 
-    public static ShapeType getShape() {
+    public ShapeType getShape() {
         return shape;
     }
 
@@ -179,16 +181,16 @@ public class GenerationCore {
             BlockPos blockPos = start.add(i, j, k);
 
             // one of five change of setting a variant block
-            double hasVariant = Math.random() * 5;
+            boolean hasVariant = new Random().nextBoolean();
             if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
-                if (hasVariant == 0) {
-                    world.setBlockState(blockPos, variants.get((int) (Math.random() * (variants.size() - 1))).getDefaultState());
+                if (hasVariant) {
+                    world.setBlockState(blockPos, variants.get(new Random().nextInt(variants.size() - 1)).getDefaultState());
                 } else {
                     world.setBlockState(blockPos, normalBlock.getDefaultState());
                 }
             } else if (overwrite == true) {
                 BlockState blockPlace = normalBlock.getDefaultState();
-                if (hasVariant == 0) {
+                if (hasVariant) {
                     blockPlace = variants.get((int) (Math.random() * (variants.size() - 1))).getDefaultState();
                 }
                 world.setBlockState(blockPos, blockPlace);
@@ -200,8 +202,12 @@ public class GenerationCore {
         fillVarients(normalBlock, variants, start, end, true);
     }
 
-    public static World getWorld() {
+    public World getWorld() {
         return world;
+    }
+
+    public Vector3d getSize() {
+        return new Vector3d(sizeX, sizeY, sizeZ);
     }
 
     public enum VarientType {
