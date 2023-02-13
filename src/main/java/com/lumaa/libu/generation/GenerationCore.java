@@ -6,6 +6,7 @@ import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -232,25 +233,42 @@ public class GenerationCore {
         WEST;
 
         public Scale3d toFill(BlockPos origin) {
+            BlockPos k = origin;
             BlockPos start = null;
             BlockPos end = null;
 
             switch (this) {
                 case EAST -> {
-                    start = origin.add(-sizeX / 2, 0, sizeZ / 2);
-                    end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
+                    k = k.east(sizeX);
+                    k = k.north(sizeZ);
+                    start = k.up(sizeY);
+                    k = origin;
+                    k = k.east(sizeX);
+                    end = k.south(sizeZ);
                 }
                 case WEST -> {
-                    start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
-                    end = origin.add(sizeX / 2, sizeY + 1, -sizeZ / 2);
+                    k = k.west(sizeX);
+                    k = k.north(sizeZ);
+                    start = k.up(sizeY);
+                    k = origin;
+                    k = k.west(sizeX);
+                    end = k.south(sizeZ);
                 }
                 case NORTH -> {
-                    start = origin.add(sizeX / 2, 0, -sizeZ / 2);
-                    end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
+                    k = k.north(sizeZ);
+                    k = k.east(sizeX);
+                    start = k.up(sizeY);
+                    k = origin;
+                    k = k.north(sizeZ);
+                    end = k.west(sizeX);
                 }
                 case SOUTH -> {
-                    start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
-                    end = origin.add(-sizeX / 2, sizeY + 1, sizeZ / 2);
+                    k = k.south(sizeZ);
+                    k = k.east(sizeX);
+                    start = k.up(sizeY);
+                    k = origin;
+                    k = k.south(sizeZ);
+                    end = k.west(sizeX);
                 }
             }
 

@@ -37,10 +37,6 @@ public class MazeCore extends GenerationCore {
                     fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
                 }
                 fill(Blocks.AIR.getDefaultState(), origin.add(-sizeX / 2, 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
-
-                if (previousEmpty != null) {
-                    fill(Blocks.AIR.getDefaultState(), previousEmpty.toFill(origin).posA, previousEmpty.toFill(origin).posB);
-                }
             }
 
             // floor
@@ -54,12 +50,18 @@ public class MazeCore extends GenerationCore {
             if (hasVarients == VarientType.FLOOR || hasVarients == VarientType.ALL) {
                 fillVarients(ROOF, ROOF_VARIANTS, origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
             } else {
-                fill(ROOF.getDefaultState(), origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
+                fill(ROOF.getDefaultState(), origin.add(-sizeX / 2 - 1, sizeY + 1, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
             }
 
             // remove random wall and continue
             this.previousEmpty = this.empty;
-            this.empty = fillRandomWall(origin, Blocks.AIR);
+            this.empty = Orientation.values()[new Random().nextInt(Orientation.values().length)];
+
+            BlockPos a = toFill(empty, origin).posA;
+            BlockPos b = toFill(empty, origin).posB;
+
+            fill(Blocks.REDSTONE_ORE.getDefaultState(), a, b);
+
             origin = updateOrigin(origin, empty);
         }
     }
@@ -73,31 +75,71 @@ public class MazeCore extends GenerationCore {
     private BlockPos updateOrigin(BlockPos origin, Orientation orientation) {
         switch (orientation) {
             case EAST -> {
-                return origin.east((int) (getSize().z));
+                return origin.east((int) (getSize().z) + 1);
             }
             case WEST -> {
-                return origin.west((int) (getSize().z));
+                return origin.west((int) (getSize().z) + 1);
             }
             case NORTH -> {
-                return origin.north((int) (getSize().x));
+                return origin.north((int) (getSize().x) + 1);
             }
             case SOUTH -> {
-                return origin.south((int) (getSize().x));
+                return origin.south((int) (getSize().x) + 1);
             }
         }
-        return origin.north((int) (getSize().x / 2));
+        return origin.north((int) (getSize().x) + 1);
     }
 
     /**
      * Fills one of the 4 walls
      */
     private Orientation fillRandomWall(BlockPos origin, Block block) {
-        Orientation removeWallOrientation = Orientation.values()[new Random().nextInt(Orientation.values().length - 1)];
-        BlockPos start = removeWallOrientation.toFill(origin).posA; // from origin
-        BlockPos end = removeWallOrientation.toFill(origin).posB; // from origin
+        Orientation j = Orientation.values()[new Random().nextInt(Orientation.values().length)];
+        fill(block.getDefaultState(), origin, j);
 
-        fill(block.getDefaultState(), start, end);
+        return j;
+    }
 
-        return removeWallOrientation;
+    public Scale3d toFill(Orientation orientation, BlockPos origin) {
+        BlockPos k = origin;
+        BlockPos start = null;
+        BlockPos end = null;
+
+        switch (orientation) {
+            case EAST -> {
+                k = k.east(sizeX);
+                k = k.north(sizeZ);
+                start = k.up(sizeY);
+                k = origin;
+                k = k.east(sizeX);
+                end = k.south(sizeZ);
+            }
+            case WEST -> {
+                k = k.west(sizeX);
+                k = k.north(sizeZ);
+                start = k.up(sizeY);
+                k = origin;
+                k = k.west(sizeX);
+                end = k.south(sizeZ);
+            }
+            case NORTH -> {
+                k = k.north(sizeZ);
+                k = k.east(sizeX);
+                start = k.up(sizeY);
+                k = origin;
+                k = k.north(sizeZ);
+                end = k.west(sizeX);
+            }
+            case SOUTH -> {
+                k = k.south(sizeZ);
+                k = k.east(sizeX);
+                start = k.up(sizeY);
+                k = origin;
+                k = k.south(sizeZ);
+                end = k.west(sizeX);
+            }
+        }
+
+        return new Scale3d(start, end);
     }
 }

@@ -17,7 +17,7 @@ public class MazeTool extends Item {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-        MazeCore mazeCore = new MazeCore(Blocks.GRASS_BLOCK, Blocks.STONE, Blocks.BEDROCK, 5);
+        MazeCore mazeCore = new MazeCore(Blocks.PODZOL, Blocks.STONE, Blocks.BEDROCK, 2);
         mazeCore.setWallsVariants(List.of(Blocks.GRANITE, Blocks.COBBLESTONE));
         mazeCore.setSize(6, 6);
         mazeCore.setHeight(6);
