@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class ModItems {
-    public static final Item MAZE_TOOL = registerItem("maze_tool", new MazeTool(new Item.Settings().maxCount(1)), ItemGroups.FUNCTIONAL);
+    public static final Item MAZE_TOOL = registerItem("maze_tool", new MazeTool(new Item.Settings().maxCount(1)), ItemGroups.TOOLS);
 
     public static Item registerItem(String name, Item item, @Nullable ItemGroup group) {
         Item newItem = Registry.register(Registries.ITEM, new Identifier("libu", name), item);
