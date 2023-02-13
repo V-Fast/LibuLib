@@ -1,8 +1,8 @@
 package com.lumaa.libu.items.gen;
 
 import com.lumaa.libu.generation.MazeCore;
-import com.lumaa.libu.generation.ShapeType;
-import com.lumaa.libu.generation.StructureType;
+import com.lumaa.libu.generation.type.ShapeType;
+import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUsageContext;

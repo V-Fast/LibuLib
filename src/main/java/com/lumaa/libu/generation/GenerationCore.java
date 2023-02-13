@@ -1,13 +1,14 @@
 package com.lumaa.libu.generation;
 
 import com.lumaa.libu.LibuLibClient;
+import com.lumaa.libu.generation.type.ShapeType;
+import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.joml.Vector2d;
 import org.joml.Vector3d;
 
 import java.util.List;

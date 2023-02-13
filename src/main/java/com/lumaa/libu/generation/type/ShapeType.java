@@ -1,4 +1,4 @@
-package com.lumaa.libu.generation;
+package com.lumaa.libu.generation.type;
 
 public enum ShapeType {
     /** Makes a box structure */

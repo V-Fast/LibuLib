@@ -1,5 +1,7 @@
 package com.lumaa.libu.generation;
 
+import com.lumaa.libu.generation.type.ShapeType;
+import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
