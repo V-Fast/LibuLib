@@ -12,8 +12,8 @@ public class MazeCore extends GenerationCore {
     private StructureType type;
     private int iterations;
 
-    private Orientation previousEmpty;
-    private Orientation empty;
+    private Orientation previousEmpty = null;
+    private Orientation empty = null;
 
     public MazeCore(Block floor, Block walls, Block roof, int iterations) {
         super(floor, walls, roof);
@@ -35,6 +35,10 @@ public class MazeCore extends GenerationCore {
                     fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
                 }
                 fill(Blocks.AIR.getDefaultState(), origin.add(-sizeX / 2, 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
+
+                if (previousEmpty != null) {
+                    fill(Blocks.AIR.getDefaultState(), previousEmpty.toFill(origin).posA, previousEmpty.toFill(origin).posB);
+                }
             }
 
             // floor
@@ -87,27 +91,8 @@ public class MazeCore extends GenerationCore {
      */
     private Orientation fillRandomWall(BlockPos origin, Block block) {
         Orientation removeWallOrientation = Orientation.values()[new Random().nextInt(Orientation.values().length - 1)];
-        BlockPos start = null; // from origin
-        BlockPos end = null; // from origin
-
-        switch (removeWallOrientation) {
-            case EAST -> {
-                start = origin.add(-sizeX / 2, 0, sizeZ / 2);
-                end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
-            }
-            case WEST -> {
-                start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
-                end = origin.add(sizeX / 2, sizeY + 1, -sizeZ / 2);
-            }
-            case NORTH -> {
-                start = origin.add(sizeX / 2, 0, -sizeZ / 2);
-                end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
-            }
-            case SOUTH -> {
-                start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
-                end = origin.add(-sizeX / 2, sizeY + 1, sizeZ / 2);
-            }
-        }
+        BlockPos start = removeWallOrientation.toFill(origin).posA; // from origin
+        BlockPos end = removeWallOrientation.toFill(origin).posB; // from origin
 
         fill(block.getDefaultState(), start, end);
 

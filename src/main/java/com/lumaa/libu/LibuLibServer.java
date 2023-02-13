@@ -1,5 +1,6 @@
 package com.lumaa.libu;
 
+import com.lumaa.libu.items.ModItems;
 import com.lumaa.libu.update.ModrinthMod;
 import com.lumaa.libu.update.UpdateChecker;
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -11,6 +12,7 @@ import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Environment(EnvType.SERVER)
@@ -28,7 +30,14 @@ public class LibuLibServer implements DedicatedServerModInitializer {
 
     @Override
     public void onInitializeServer() {
-        updates.add(updateChecker); // dodge logs
+        ModItems.registerAll();
+
+        try {
+            updateChecker.findLatestVersion();
+            updates.add(updateChecker); // add independently to avoid log
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

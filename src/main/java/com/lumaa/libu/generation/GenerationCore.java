@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.joml.Vector2d;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -159,6 +160,11 @@ public class GenerationCore {
         fill(block, start, end, true);
     }
 
+    public void fill(BlockState block, BlockPos origin, Orientation orientation) {
+        Scale3d scale = orientation.toFill(origin);
+        fill(block, scale.posA, scale.posB);
+    }
+
     public void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite) {
         int width = end.getX() - start.getX();
         int depth = end.getZ() - start.getZ();
@@ -184,7 +190,7 @@ public class GenerationCore {
             boolean hasVariant = new Random().nextBoolean();
             if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
                 if (hasVariant) {
-                    world.setBlockState(blockPos, variants.get(new Random().nextInt(variants.size() - 1)).getDefaultState());
+                    world.setBlockState(blockPos, variants.get(new Random().nextInt(variants.size())).getDefaultState());
                 } else {
                     world.setBlockState(blockPos, normalBlock.getDefaultState());
                 }
@@ -222,6 +228,42 @@ public class GenerationCore {
         NORTH,
         SOUTH,
         EAST,
-        WEST
+        WEST;
+
+        public Scale3d toFill(BlockPos origin) {
+            BlockPos start = null;
+            BlockPos end = null;
+
+            switch (this) {
+                case EAST -> {
+                    start = origin.add(-sizeX / 2, 0, sizeZ / 2);
+                    end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
+                }
+                case WEST -> {
+                    start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
+                    end = origin.add(sizeX / 2, sizeY + 1, -sizeZ / 2);
+                }
+                case NORTH -> {
+                    start = origin.add(sizeX / 2, 0, -sizeZ / 2);
+                    end = origin.add(sizeX / 2, sizeY + 1, sizeZ / 2);
+                }
+                case SOUTH -> {
+                    start = origin.add(-sizeX / 2, 0, -sizeZ / 2);
+                    end = origin.add(-sizeX / 2, sizeY + 1, sizeZ / 2);
+                }
+            }
+
+            return new Scale3d(start, end);
+        }
+    }
+
+    public static class Scale3d {
+        public BlockPos posA;
+        public BlockPos posB;
+
+        public Scale3d(BlockPos positionA, BlockPos positionB) {
+            this.posA = positionA;
+            this.posB = positionB;
+        }
     }
 }
