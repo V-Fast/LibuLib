@@ -4,7 +4,6 @@ import com.lumaa.libu.items.ModItems;
 import com.lumaa.libu.update.ModrinthMod;
 import com.lumaa.libu.update.UpdateChecker;
 import com.lumaa.libu.update.UpdateScreen;
-import com.lumaa.libu.util.ModSettings;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 
 @Environment(EnvType.CLIENT)
 public class LibuLibClient implements ClientModInitializer {
-    public static final ModSettings settings = new ModSettings();
     public static final Logger logger = LoggerFactory.getLogger("libu");
     private static final String ID = "libu";
 
