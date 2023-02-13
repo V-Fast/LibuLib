@@ -3,5 +3,7 @@
   "mod.libulib.short_name": "Libu",
 
   "update.libulib.title": "%s a une mise à jour !",
-  "update.libulib.description": "Vous utilisez actuellement une version antérieur de %s, version %s. \nNous recommandons que vous le mettiez à jour, la version %s de %s."
+  "update.libulib.description": "Vous utilisez actuellement une version antérieur de %s, version %s. \nNous recommandons que vous le mettiez à jour, la version %s de %s.",
+
+  "item.libu.maze_tool": "Maze Tool"
 }
