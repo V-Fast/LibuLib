@@ -1,4 +1,4 @@
-package com.lumaa.libu;
+package com.lumaa.libu.util;
 
 public class Color {
   public static final int white = fromRGB(255, 255, 255);
