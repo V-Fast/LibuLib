@@ -6,7 +6,6 @@ import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -24,10 +23,15 @@ public class GenerationCore {
     public static Block ROOF = null;
 
     // variants
-    public static VarientType hasVarients = VarientType.NONE;
+    public static VariantType hasVariants = VariantType.NONE;
     public static List<Block> FLOOR_VARIANTS = null;
     public static List<Block> WALLS_VARIANTS = null;
     public static List<Block> ROOF_VARIANTS = null;
+
+    // variant amounts
+    public static VariantAmount FLOOR_VARIANTS_AMOUNT = VariantAmount.MEDIUM;
+    public static VariantAmount WALLS_VARIANTS_AMOUNT = VariantAmount.MEDIUM;
+    public static VariantAmount ROOF_VARIANTS_AMOUNT = VariantAmount.MEDIUM;
 
     // sizes
     public static int sizeX = 16;
@@ -38,6 +42,9 @@ public class GenerationCore {
     // types
     private static StructureType type = StructureType.BLOCKY;
     private static ShapeType shape = ShapeType.BOX;
+
+    private static boolean breakNonair = false;
+    private static boolean dropOnBreak = false;
 
     public GenerationCore(Block floor, Block walls, Block roof) {
         FLOOR = floor;
@@ -51,7 +58,7 @@ public class GenerationCore {
             FLOOR_VARIANTS = floor;
             WALLS_VARIANTS = walls;
             ROOF_VARIANTS = roof;
-            hasVarients = VarientType.ALL;
+            hasVariants = VariantType.ALL;
         } else {
             LibuLibClient.logger.error("Variant lists must not contain their normal blocks");
         }
@@ -60,19 +67,19 @@ public class GenerationCore {
     public void setFloorVariants(List<Block> floorVariants) {
         if (floorVariants.contains(FLOOR)) LibuLibClient.logger.error("Floor Variant list must not contain normal floor block");
         FLOOR_VARIANTS = floorVariants;
-        hasVarients = VarientType.FLOOR;
+        hasVariants = VariantType.FLOOR;
     }
 
     public void setWallsVariants(List<Block> wallsVariants) {
         if (wallsVariants.contains(WALLS)) LibuLibClient.logger.error("Walls Variant list must not contain normal walls block");
         WALLS_VARIANTS = wallsVariants;
-        hasVarients = VarientType.WALLS;
+        hasVariants = VariantType.WALLS;
     }
 
     public void setRoofVariants(List<Block> roofVariants) {
         if (roofVariants.contains(ROOF)) LibuLibClient.logger.error("Roof Variant list must not contain normal roof block");
         ROOF_VARIANTS = roofVariants;
-        hasVarients = VarientType.ROOF;
+        hasVariants = VariantType.ROOF;
     }
 
     public void setSize(int x, int z) {
@@ -108,15 +115,25 @@ public class GenerationCore {
         return type;
     }
 
+    /**
+     * Define if the non-air block should break and drop
+     * @param breakNonAir Define if the non-air block should break
+     * @param drop Set if the non-air block drops
+     */
+    public static void setBreakNonAir(boolean breakNonAir, boolean drop) {
+        GenerationCore.breakNonair = breakNonAir;
+        GenerationCore.dropOnBreak = drop;
+    }
+
     private static void fixVars() {
         if (FLOOR_VARIANTS != null && WALLS_VARIANTS != null && ROOF_VARIANTS != null) {
-            hasVarients = VarientType.ALL;
+            hasVariants = VariantType.ALL;
         } else if (FLOOR_VARIANTS != null && WALLS_VARIANTS == null && ROOF_VARIANTS == null) {
-            hasVarients = VarientType.FLOOR;
+            hasVariants = VariantType.FLOOR;
         } else if (FLOOR_VARIANTS == null && WALLS_VARIANTS != null && ROOF_VARIANTS == null) {
-            hasVarients = VarientType.WALLS;
+            hasVariants = VariantType.WALLS;
         } else if (FLOOR_VARIANTS == null && WALLS_VARIANTS == null && ROOF_VARIANTS != null) {
-            hasVarients = VarientType.ROOF;
+            hasVariants = VariantType.ROOF;
         }
     }
 
@@ -150,9 +167,10 @@ public class GenerationCore {
             int j = t / (width * depth);
             int k = (t / width) % depth;
             BlockPos blockPos = start.add(i, j, k);
-            if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
+            if ((world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState()) && world.canSetBlock(blockPos) && overwrite == false) {
                 world.setBlockState(blockPos, block);
-            } else if (overwrite == true) {
+            } else if (overwrite == true && world.canSetBlock(blockPos)) {
+                if (breakNonair && !(world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState())) world.breakBlock(blockPos, true);
                 world.setBlockState(blockPos, block);
             }
         }
@@ -162,12 +180,12 @@ public class GenerationCore {
         fill(block, start, end, true);
     }
 
-    public void fill(BlockState block, BlockPos origin, Orientation orientation) {
-        Scale3d scale = orientation.toFill(origin);
-        fill(block, scale.posA, scale.posB);
-    }
+//    public void fill(BlockState block, BlockPos origin, Orientation orientation) {
+//        Scale3d scale = orientation.toFill(origin);
+//        fill(block, scale.posA, scale.posB);
+//    }
 
-    public void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite) {
+    public void fillVariants(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite, VariantType variantType) {
         int width = end.getX() - start.getX();
         int depth = end.getZ() - start.getZ();
         int height = end.getY() - start.getY();
@@ -188,9 +206,9 @@ public class GenerationCore {
             int k = (t / width) % depth;
             BlockPos blockPos = start.add(i, j, k);
 
-            // one of five change of setting a variant block
-            boolean hasVariant = new Random().nextBoolean();
-            if (world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState() && overwrite == false) {
+            // variable variant chance
+            boolean hasVariant = hasVariant(variantType);
+            if ((world.getBlockState(blockPos) == Blocks.AIR.getDefaultState() || world.getBlockState(blockPos) == Blocks.CAVE_AIR.getDefaultState()) && overwrite == false) {
                 if (hasVariant) {
                     world.setBlockState(blockPos, variants.get(new Random().nextInt(variants.size())).getDefaultState());
                 } else {
@@ -206,8 +224,25 @@ public class GenerationCore {
         }
     }
 
-    public void fillVarients(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end) {
-        fillVarients(normalBlock, variants, start, end, true);
+    public void fillVariants(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, VariantType variantType) {
+        fillVariants(normalBlock, variants, start, end, true, variantType);
+    }
+
+    public void fillVariants(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end) {
+        fillVariants(normalBlock, variants, start, end, true, VariantType.ALL);
+    }
+
+    private boolean hasVariant(VariantType type) {
+        if (type == VariantType.ALL || type == VariantType.NONE) {
+            return VariantAmount.UNDEFINED.test();
+        } else if (type == VariantType.FLOOR) {
+            return FLOOR_VARIANTS_AMOUNT.test();
+        } else if (type == VariantType.WALLS) {
+            return WALLS_VARIANTS_AMOUNT.test();
+        } else if (type == VariantType.ROOF) {
+            return ROOF_VARIANTS_AMOUNT.test();
+        }
+        return false;
     }
 
     public World getWorld() {
@@ -218,7 +253,21 @@ public class GenerationCore {
         return new Vector3d(sizeX, sizeY, sizeZ);
     }
 
-    public enum VarientType {
+    public static void setFloorVariantsAmount(VariantAmount floorVariantsAmount) {
+        FLOOR_VARIANTS_AMOUNT = floorVariantsAmount;
+    }
+
+    public static void setWallsVariantsAmount(VariantAmount wallsVariantsAmount) {
+        WALLS_VARIANTS_AMOUNT = wallsVariantsAmount;
+    }
+
+    public static void setRoofVariantsAmount(VariantAmount roofVariantsAmount) {
+        ROOF_VARIANTS_AMOUNT = roofVariantsAmount;
+    }
+
+    // other
+
+    public enum VariantType {
         NONE,
         ALL,
         FLOOR,
@@ -283,6 +332,26 @@ public class GenerationCore {
         public Scale3d(BlockPos positionA, BlockPos positionB) {
             this.posA = positionA;
             this.posB = positionB;
+        }
+    }
+
+    public enum VariantAmount {
+
+        UNDEFINED(5),
+        LOW(20),
+        MEDIUM(10),
+        HIGH(3),
+        EVERYTIME(0);
+
+        public int rngMax;
+
+        VariantAmount(int rngMax) {
+            this.rngMax = rngMax;
+        }
+
+        public boolean test() {
+            if (this.rngMax == 0) return true;
+            return new Random().nextInt(this.rngMax) == 0;
         }
     }
 }

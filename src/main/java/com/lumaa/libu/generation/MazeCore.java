@@ -14,8 +14,7 @@ public class MazeCore extends GenerationCore {
     private StructureType type;
     private int iterations;
 
-    private Orientation previousEmpty = null;
-    private Orientation empty = null;
+    private Orientation next = null;
 
     public MazeCore(Block floor, Block walls, Block roof, int iterations) {
         super(floor, walls, roof);
@@ -31,8 +30,8 @@ public class MazeCore extends GenerationCore {
         for (int i = 0; i < iterations; i++) {
             // walls
             if (type == StructureType.BLOCKY && shape == ShapeType.BOX) {
-                if (hasVarients == VarientType.WALLS || hasVarients == VarientType.ALL) {
-                    fillVarients(WALLS, WALLS_VARIANTS, origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
+                if (hasVariants == VariantType.WALLS || hasVariants == VariantType.ALL) {
+                    fillVariants(WALLS, WALLS_VARIANTS, origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1), VariantType.WALLS);
                 } else {
                     fill(WALLS.getDefaultState(), origin.add(-sizeX / 2 - 1, 0, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
                 }
@@ -40,29 +39,30 @@ public class MazeCore extends GenerationCore {
             }
 
             // floor
-            if (hasVarients == VarientType.FLOOR || hasVarients == VarientType.ALL) {
-                fillVarients(FLOOR, FLOOR_VARIANTS, origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
+            if (hasVariants == VariantType.FLOOR || hasVariants == VariantType.ALL) {
+                fillVariants(FLOOR, FLOOR_VARIANTS, origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2), VariantType.FLOOR);
             } else {
                 fill(FLOOR.getDefaultState(), origin.add(-sizeX / 2, 0, -sizeZ / 2), origin.add(sizeX / 2, 0, sizeZ / 2));
             }
 
             // roof
-            if (hasVarients == VarientType.FLOOR || hasVarients == VarientType.ALL) {
-                fillVarients(ROOF, ROOF_VARIANTS, origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2));
+            if (hasVariants == VariantType.FLOOR || hasVariants == VariantType.ALL) {
+                fillVariants(ROOF, ROOF_VARIANTS, origin.add(-sizeX / 2, sizeY + 1, -sizeZ / 2), origin.add(sizeX / 2, sizeY + 1, sizeZ / 2), VariantType.ROOF);
             } else {
                 fill(ROOF.getDefaultState(), origin.add(-sizeX / 2 - 1, sizeY + 1, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
             }
 
             // remove random wall and continue
-            this.previousEmpty = this.empty;
-            this.empty = Orientation.values()[new Random().nextInt(Orientation.values().length)];
+            if (i != iterations) {
+                this.next = Orientation.values()[new Random().nextInt(Orientation.values().length)];
 
-            BlockPos a = toFill(empty, origin).posA;
-            BlockPos b = toFill(empty, origin).posB;
+                BlockPos a = toFill(next, origin).posA;
+                BlockPos b = toFill(next, origin).posB;
 
-            fill(Blocks.REDSTONE_ORE.getDefaultState(), a, b);
+                fill(Blocks.AIR.getDefaultState(), a, b);
 
-            origin = updateOrigin(origin, empty);
+                origin = updateOrigin(origin, next);
+            }
         }
     }
 
@@ -90,53 +90,26 @@ public class MazeCore extends GenerationCore {
         return origin.north((int) (getSize().x) + 1);
     }
 
-    /**
-     * Fills one of the 4 walls
-     */
-    private Orientation fillRandomWall(BlockPos origin, Block block) {
-        Orientation j = Orientation.values()[new Random().nextInt(Orientation.values().length)];
-        fill(block.getDefaultState(), origin, j);
-
-        return j;
-    }
-
     public Scale3d toFill(Orientation orientation, BlockPos origin) {
-        BlockPos k = origin;
         BlockPos start = null;
         BlockPos end = null;
 
         switch (orientation) {
             case EAST -> {
-                k = k.east(sizeX);
-                k = k.north(sizeZ);
-                start = k.up(sizeY);
-                k = origin;
-                k = k.east(sizeX);
-                end = k.south(sizeZ);
+                start = origin.add(sizeX / 2, sizeY, sizeZ / 2);
+                end = origin.add(sizeX / 2, 0, -sizeZ / 2);
             }
             case WEST -> {
-                k = k.west(sizeX);
-                k = k.north(sizeZ);
-                start = k.up(sizeY);
-                k = origin;
-                k = k.west(sizeX);
-                end = k.south(sizeZ);
+                start = origin.add(-sizeX / 2, sizeY, sizeZ / 2);
+                end = origin.add(-sizeX / 2, 0, -sizeZ / 2);
             }
             case NORTH -> {
-                k = k.north(sizeZ);
-                k = k.east(sizeX);
-                start = k.up(sizeY);
-                k = origin;
-                k = k.north(sizeZ);
-                end = k.west(sizeX);
+                start = origin.add(sizeX / 2, sizeY, sizeZ / 2);
+                end = origin.add(-sizeX / 2, 0, sizeZ / 2);
             }
             case SOUTH -> {
-                k = k.south(sizeZ);
-                k = k.east(sizeX);
-                start = k.up(sizeY);
-                k = origin;
-                k = k.south(sizeZ);
-                end = k.west(sizeX);
+                start = origin.add(sizeX / 2, sizeY, -sizeZ / 2);
+                end = origin.add(-sizeX / 2, 0, -sizeZ / 2);
             }
         }
 
