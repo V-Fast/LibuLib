@@ -13,6 +13,7 @@
 **LibuLib** is a library mod made for all the mods by myself  
 Wiki: https://github.com/u-lumaa/LibuLib/wiki
 
+## Import LibuLib
 Use it in your mod by doing the following (JitPack):
 
 **gradle.properties**:
