@@ -12,7 +12,9 @@
     "PatateGivree"
   ],
   "contact": {
-    "homepage": "https://lumaa.brebond.com/"
+    "homepage": "https://lumaa.brebond.com/",
+    "sources": "https://github.com/lumaa-dev/LibuLib",
+    "issues": "https://github.com/lumaa-dev/LibuLib/issues"
   },
 
   "license": "MIT",
