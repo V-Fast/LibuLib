@@ -6,5 +6,5 @@
   "update.libulib.description": "Vous utilisez actuellement une version antérieur de %s, version %s. \nNous recommandons que vous le mettiez à jour, la version %s de %s.",
 
   "item.libu.maze_tool": "Maze Tool",
-  "item.libu.maze_tool.desc": "Le Maze Tool est un item fait pour les créateurs\nde maps pour générer un labyrinthe\naléatoirement (EXPÉRIMENTAL)"
+  "item.libu.maze_tool.desc": "EXPÉRIMENTAL"
 }
