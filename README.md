@@ -19,7 +19,7 @@ Use it in your mod by doing the following (JitPack):
 **gradle.properties**:
 ```properties
 # Put the latest version of LibuLib
-libu_version = 1.1.0
+libu_version = 1.2.0
 ```
 
 **build.gradle**:
@@ -44,7 +44,7 @@ You can use it in your mod by doing the following (Modrinth Maven):
 **gradle.properties**:
 ```properties
 # Put the latest version of LibuLib
-libu_version = 1.1.0
+libu_version = 1.2.0
 ```
 
 **build.gradle**:
