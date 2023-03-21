@@ -29,7 +29,7 @@ public class LibuProjectile extends ThrownItemEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), projectileInfo.damage);
+        entity.damage(world.getDamageSources().thrown(this, this.getOwner()), projectileInfo.damage);
     }
 
     @Override
