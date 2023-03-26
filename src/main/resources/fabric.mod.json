@@ -6,7 +6,7 @@
   "name": "Libu",
   "description": "Library made for developers that doesn't like writing the same code over and over again, just like me, Lumaa.",
   "authors": [
-    "_Lumaa_"
+    "LumaaDev"
   ],
   "contributors": [
     "PatateGivree"
@@ -36,11 +36,11 @@
   "depends": {
     "fabricloader": ">=0.14.12",
     "fabric-api": ">=0.76.0",
-    "minecraft": ">=1.19.4",
+    "minecraft": "~1.19.4",
     "java": ">=17"
   },
   "suggests": {
-    "modmenu": ">=5.0.0"
+    "modmenu": ">=6.0.0"
   },
 
   "custom": {
