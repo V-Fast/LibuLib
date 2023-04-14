@@ -35,12 +35,12 @@
 
   "depends": {
     "fabricloader": ">=0.14.12",
-    "fabric-api": ">=0.76.0",
-    "minecraft": "~1.19.4",
+    "fabric-api": ">=0.70.0",
+    "minecraft": "=1.19.3",
     "java": ">=17"
   },
   "suggests": {
-    "modmenu": ">=6.0.0"
+    "modmenu": ">=5.0.0"
   },
 
   "custom": {
