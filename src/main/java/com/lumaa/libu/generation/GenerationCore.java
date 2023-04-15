@@ -336,7 +336,6 @@ public class GenerationCore {
     }
 
     public enum VariantAmount {
-
         UNDEFINED(5),
         LOW(20),
         MEDIUM(10),
