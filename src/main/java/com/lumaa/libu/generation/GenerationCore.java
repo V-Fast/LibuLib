@@ -3,6 +3,7 @@ package com.lumaa.libu.generation;
 import com.lumaa.libu.LibuLibClient;
 import com.lumaa.libu.generation.type.ShapeType;
 import com.lumaa.libu.generation.type.StructureType;
+import com.lumaa.libu.util.Geometry;
 import com.lumaa.libu.util.MinecraftGeometry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -10,7 +11,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.joml.Vector3d;
 
 import java.util.List;
 import java.util.Random;
@@ -254,8 +254,8 @@ public class GenerationCore implements IGenerator {
         return world;
     }
 
-    public Vector3d getSize() {
-        return new Vector3d(sizeX, sizeY, sizeZ);
+    public Geometry.Coordinate getSize() {
+        return new Geometry.Coordinate(sizeX, sizeY, sizeZ);
     }
 
     public boolean isBreakNonair() {
@@ -272,6 +272,18 @@ public class GenerationCore implements IGenerator {
 
     public static void setRoofVariantsAmount(VariantAmount roofVariantsAmount) {
         ROOF_VARIANTS_AMOUNT = roofVariantsAmount;
+    }
+
+    public Block getWalls() {
+        return WALLS;
+    }
+
+    public Block getFloor() {
+        return FLOOR;
+    }
+
+    public static Block getRoof() {
+        return ROOF;
     }
 
     // other

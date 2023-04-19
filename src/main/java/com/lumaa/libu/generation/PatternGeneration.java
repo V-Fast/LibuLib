@@ -63,6 +63,14 @@ public class PatternGeneration implements IGenerator {
         return breakNonair;
     }
 
+    public GenerationCore getGenCore() {
+        return genCore;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
     public boolean useVariant(int maxCombination) {
         if (maxCombination == 0) return false; // probability isn't valid
         return new Random().nextInt(maxCombination) == 0;

@@ -42,9 +42,14 @@ public class Geometry {
             this.y = y;
         }
 
-        public int getZ() throws Exception {
-            if (!is3d()) throw new Exception("Cannot get Z coordinates in a 2D space");
-            return z;
+        public int getZ() {
+            try {
+                if (!is3d()) throw new Exception("Cannot get Z coordinates in a 2D space");
+                return z;
+            } catch (Exception e) {
+                LibuLibClient.logger.error(e.getMessage());
+            }
+            return 0;
         }
 
         public void setZ(int z) {
