@@ -19,7 +19,7 @@ public class LibuLibClient implements ClientModInitializer {
     public static final Logger logger = LoggerFactory.getLogger("libu");
     private static final String ID = "libu";
 
-    private static final String versionId = FabricLoader.getInstance()
+    public static final String versionId = FabricLoader.getInstance()
             .getModContainer("libu")
             .orElseThrow()
             .getMetadata()
