@@ -1,5 +1,6 @@
 package com.lumaa.libu.client.ui;
 
+import com.lumaa.libu.LibuLibClient;
 import com.lumaa.libu.util.Color;
 import com.lumaa.libu.util.Geometry.*;
 import net.minecraft.client.MinecraftClient;
@@ -12,6 +13,7 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 
+@Deprecated
 public class LButton extends DrawableHelper implements Drawable, Element, Selectable {
     public int x;
     public int y;
@@ -34,11 +36,12 @@ public class LButton extends DrawableHelper implements Drawable, Element, Select
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        if (!visible) return;
         int x1 = this.x;
         int y1 = this.y;
 
-        int x2 = this.x + this.size.getEndCoordinates().x;
-        int y2 = this.y + this.size.getEndCoordinates().y;
+        int x2 = this.x + this.size.getEndCoordinates().getX();
+        int y2 = this.y + this.size.getEndCoordinates().getY();
 
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer textRenderer = client.textRenderer;
@@ -65,14 +68,23 @@ public class LButton extends DrawableHelper implements Drawable, Element, Select
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        int endX = this.x + this.size.getEndCoordinates().x;
-        int endY = this.y + this.size.getEndCoordinates().y;
+        int endX = this.x + this.size.getEndCoordinates().getX();
+        int endY = this.y + this.size.getEndCoordinates().getY();
 
         boolean axisX = mouseX >= x && mouseX <= endX;
         boolean axisY = mouseY >= y && mouseY <= endY;
 
         this.hovering = axisX && axisY;
         return this.hovering;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (isMouseOver(mouseX, mouseY)) {
+            LibuLibClient.logger.info("Click");
+            return true;
+        }
+        return false;
     }
 
     @Override
