@@ -2,6 +2,7 @@ package com.lumaa.libu.generation;
 
 import com.lumaa.libu.generation.type.ShapeType;
 import com.lumaa.libu.generation.type.StructureType;
+import com.lumaa.libu.util.MinecraftGeometry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -9,7 +10,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class MazeCore extends GenerationCore {
+public class MazeCore extends GenerationCore implements IGenerator {
     private ShapeType shape;
     private StructureType type;
     private int iterations;
@@ -90,7 +91,7 @@ public class MazeCore extends GenerationCore {
         return origin.north((int) (getSize().x) + 1);
     }
 
-    public Scale3d toFill(Orientation orientation, BlockPos origin) {
+    public MinecraftGeometry.Scale3d toFill(Orientation orientation, BlockPos origin) {
         BlockPos start = null;
         BlockPos end = null;
 
@@ -113,6 +114,6 @@ public class MazeCore extends GenerationCore {
             }
         }
 
-        return new Scale3d(start, end);
+        return new MinecraftGeometry.Scale3d(start, end);
     }
 }
