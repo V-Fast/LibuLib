@@ -28,6 +28,7 @@ public class LibuWeapon {
     /**
      * @deprecated Does not work properly
      */
+    @Deprecated
     public static class LibuThrowable extends Item {
         private static LibuProjectile.ProjectileInfo projectileInfo;
 
