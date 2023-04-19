@@ -53,6 +53,10 @@ public class MazeCore extends GenerationCore implements IGenerator {
                 fill(ROOF.getDefaultState(), origin.add(-sizeX / 2 - 1, sizeY + 1, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
             }
 
+            // pillars
+            PillarPattern pillarPattern = new PillarPattern(this, WALLS);
+            pillarPattern.generate(world, origin);
+
             // remove random wall and continue
             if (i != iterations) {
                 this.next = Orientation.values()[new Random().nextInt(Orientation.values().length)];
@@ -76,19 +80,19 @@ public class MazeCore extends GenerationCore implements IGenerator {
     private BlockPos updateOrigin(BlockPos origin, Orientation orientation) {
         switch (orientation) {
             case EAST -> {
-                return origin.east((int) (getSize().z) + 1);
+                return origin.east((int) (getSize().getZ()) + 1);
             }
             case WEST -> {
-                return origin.west((int) (getSize().z) + 1);
+                return origin.west((int) (getSize().getZ()) + 1);
             }
             case NORTH -> {
-                return origin.north((int) (getSize().x) + 1);
+                return origin.north((int) (getSize().getX()) + 1);
             }
             case SOUTH -> {
-                return origin.south((int) (getSize().x) + 1);
+                return origin.south((int) (getSize().getX()) + 1);
             }
         }
-        return origin.north((int) (getSize().x) + 1);
+        return origin.north((int) (getSize().getX()) + 1);
     }
 
     public MinecraftGeometry.Scale3d toFill(Orientation orientation, BlockPos origin) {
