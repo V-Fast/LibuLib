@@ -5,7 +5,6 @@ import com.lumaa.libu.client.TestScreen;
 import com.lumaa.libu.client.ui.LibuToast;
 import com.lumaa.libu.util.BetterText;
 import com.lumaa.libu.util.Color;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
