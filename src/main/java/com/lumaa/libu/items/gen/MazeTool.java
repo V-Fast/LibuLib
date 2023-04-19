@@ -1,6 +1,7 @@
 package com.lumaa.libu.items.gen;
 
 import com.lumaa.libu.generation.MazeCore;
+import com.lumaa.libu.generation.PillarPattern;
 import com.lumaa.libu.generation.type.ShapeType;
 import com.lumaa.libu.generation.type.StructureType;
 import net.minecraft.block.Blocks;
@@ -26,13 +27,16 @@ public class MazeTool extends Item {
     public ActionResult useOnBlock(ItemUsageContext context) {
         MazeCore mazeCore = new MazeCore(Blocks.PODZOL, Blocks.STONE, Blocks.BEDROCK, 2);
         mazeCore.setWallsVariants(List.of(Blocks.GRANITE, Blocks.COBBLESTONE));
-        mazeCore.setSize(3, 3);
+        mazeCore.setSize(13, 13);
         mazeCore.setHeight(3);
         mazeCore.setShape(ShapeType.BOX);
         mazeCore.setType(StructureType.BLOCKY);
-        mazeCore.setBreakNonAir(true, true);
+        mazeCore.setBreakNonAir(false, false);
+
+        PillarPattern pillarPattern = new PillarPattern(mazeCore, mazeCore.getWalls());
 
         mazeCore.generate(context.getWorld(), context.getBlockPos());
+        pillarPattern.generate(mazeCore.getWorld(), context.getBlockPos());
         return ActionResult.SUCCESS;
     }
 
