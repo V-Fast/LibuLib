@@ -53,6 +53,10 @@ public class MazeCore extends GenerationCore implements IGenerator {
                 fill(ROOF.getDefaultState(), origin.add(-sizeX / 2 - 1, sizeY + 1, -sizeZ / 2 - 1), origin.add(sizeX / 2 + 1, sizeY + 1, sizeZ / 2 + 1));
             }
 
+            // pillars
+            PillarPattern pillarPattern = new PillarPattern(this, WALLS);
+            pillarPattern.generate(world, origin);
+
             // remove random wall and continue
             if (i != iterations) {
                 this.next = Orientation.values()[new Random().nextInt(Orientation.values().length)];
