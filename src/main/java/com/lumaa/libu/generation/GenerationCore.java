@@ -3,6 +3,7 @@ package com.lumaa.libu.generation;
 import com.lumaa.libu.LibuLibClient;
 import com.lumaa.libu.generation.type.ShapeType;
 import com.lumaa.libu.generation.type.StructureType;
+import com.lumaa.libu.util.MinecraftGeometry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,7 +15,7 @@ import org.joml.Vector3d;
 import java.util.List;
 import java.util.Random;
 
-public class GenerationCore {
+public class GenerationCore implements IGenerator {
     private static World world;
 
     // normal blocks
@@ -125,6 +126,7 @@ public class GenerationCore {
         GenerationCore.dropOnBreak = drop;
     }
 
+    // temp method
     private static void fixVars() {
         if (FLOOR_VARIANTS != null && WALLS_VARIANTS != null && ROOF_VARIANTS != null) {
             hasVariants = VariantType.ALL;
@@ -176,14 +178,17 @@ public class GenerationCore {
         }
     }
 
+    public void fill(BlockState block, MinecraftGeometry.Scale3d scale) {
+        fill(block, scale, true);
+    }
+
+    public void fill(BlockState block, MinecraftGeometry.Scale3d scale, boolean overwrite) {
+        fill(block, scale.posA, scale.posB, true);
+    }
+
     public void fill(BlockState block, BlockPos start, BlockPos end) {
         fill(block, start, end, true);
     }
-
-//    public void fill(BlockState block, BlockPos origin, Orientation orientation) {
-//        Scale3d scale = orientation.toFill(origin);
-//        fill(block, scale.posA, scale.posB);
-//    }
 
     public void fillVariants(Block normalBlock, List<Block> variants, BlockPos start, BlockPos end, boolean overwrite, VariantType variantType) {
         int width = end.getX() - start.getX();
@@ -253,6 +258,10 @@ public class GenerationCore {
         return new Vector3d(sizeX, sizeY, sizeZ);
     }
 
+    public boolean isBreakNonair() {
+        return breakNonair;
+    }
+
     public static void setFloorVariantsAmount(VariantAmount floorVariantsAmount) {
         FLOOR_VARIANTS_AMOUNT = floorVariantsAmount;
     }
@@ -281,7 +290,7 @@ public class GenerationCore {
         EAST,
         WEST;
 
-        public Scale3d toFill(BlockPos origin) {
+        public MinecraftGeometry.Scale3d toFill(BlockPos origin) {
             BlockPos k = origin;
             BlockPos start = null;
             BlockPos end = null;
@@ -321,17 +330,7 @@ public class GenerationCore {
                 }
             }
 
-            return new Scale3d(start, end);
-        }
-    }
-
-    public static class Scale3d {
-        public BlockPos posA;
-        public BlockPos posB;
-
-        public Scale3d(BlockPos positionA, BlockPos positionB) {
-            this.posA = positionA;
-            this.posB = positionB;
+            return new MinecraftGeometry.Scale3d(start, end);
         }
     }
 
