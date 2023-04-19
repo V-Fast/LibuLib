@@ -12,16 +12,15 @@ public class TestScreen extends Screen {
 
     public TestScreen() {
         super(Text.empty());
+        BUTTON_A.x = 80;
+        BUTTON_A.y = 80;
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
 
-        BUTTON_A.x = 20;
-        BUTTON_A.y = 20;
-
-        BUTTON_A.changeSize(20, 20);
+        BUTTON_A.changeSize(60, 20);
 
         BUTTON_A.render(matrices, mouseX, mouseY, delta);
     }
