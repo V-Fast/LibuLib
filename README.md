@@ -1,25 +1,20 @@
-<center><div align="center">
-
 # LibuLib
 
-![Fabric only](https://raw.githubusercontent.com/u-lumaa/u-lumaa/main/assets/fabric-banner.png)  
-[![JitPack](https://jitpack.io/v/lumaa-dev/LibuLib.svg)](https://jitpack.io/#lumaa-dev/LibuLib)
-<!-- [Modrinth Downloads](https://img.shields.io/modrinth/dt/libu?label=Modrinth&logo=modrinth) -->
-![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/libu?label=Minecraft%20Version)  
-[![Discord Server](https://img.shields.io/discord/1033451342984908900?label=Support%20Discord&logo=discord)](https://discord.gg/Rqpn3C7yR5)
-
-</div></center>
+[![Fabric](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_64h.png)](https://fabricmc.net)
+[![Requires Fabric API](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/requires/fabric-api_64h.png)](https://modrinth.com/mod/fabric-api)
+[![GitHub Wiki](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/gitbook_64h.png)](https://github.com/lumaa-dev/LibuLib/wiki)
+[![Support Discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-singular_64h.png)](https://discord.gg/Rqpn3C7yR5)  
+![Gradle](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/built-with/gradle_46h.png)
+[![JitPack](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/available/jitpack_46h.png)](https://jitpack.io/#lumaa-dev/LibuLib)
 
 **LibuLib** is a library mod made for all the mods by myself  
-Wiki: https://github.com/lumaa-dev/LibuLib/wiki
 
-## Import LibuLib
 Use it in your mod by doing the following (JitPack):
 
 **gradle.properties**:
 ```properties
 # Put the latest version of LibuLib
-libu_version = 1.2.0
+libu_version = 1.2.1
 ```
 
 **build.gradle**:
@@ -36,7 +31,7 @@ dependencies {
 }
 ```
 
-**I will not support people using developer versions**
+**Use developer versions at your own risk**
 * * *
 
 You can use it in your mod by doing the following (Modrinth Maven):
@@ -44,7 +39,7 @@ You can use it in your mod by doing the following (Modrinth Maven):
 **gradle.properties**:
 ```properties
 # Put the latest version of LibuLib
-libu_version = 1.2.0
+libu_version = 1.2.1+1
 ```
 
 **build.gradle**:
