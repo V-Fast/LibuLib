@@ -2,6 +2,7 @@ package com.lumaa.libu.util;
 
 import com.lumaa.libu.LibuLibClient;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class Geometry {
     public static class Coordinate {
@@ -24,6 +25,14 @@ public class Geometry {
             this.z = z;
 
             setIs3d(true);
+        }
+
+        public Coordinate(BlockPos blockPos) {
+            new Coordinate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        }
+
+        public Coordinate(Vec3d vec3d) {
+            new Coordinate((int) vec3d.x,(int)  vec3d.y,(int)  vec3d.z);
         }
 
         public int getX() {
