@@ -11,6 +11,7 @@ import net.minecraft.client.toast.ToastManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class LibuToast implements Toast {
@@ -23,7 +24,7 @@ public class LibuToast implements Toast {
     private static int descColor = 0xffff55;
     private boolean displayed;
 
-    public LibuToast(ItemStack icon, MutableText title, MutableText description) {
+    public LibuToast(@Nullable ItemStack icon, MutableText title, MutableText description) {
         this.icon = icon;
         this.title = title;
         this.description = description;
@@ -51,6 +52,8 @@ public class LibuToast implements Toast {
         manager.drawTexture(matrices,  0, 0, 0, type.v, getWidth(), getHeight());
         textRenderer.draw(matrices, this.title, 30.0F, 7.0F, titleColor);
         textRenderer.draw(matrices, this.description, 30.0F, 18.0F, descColor);
+
+        assert icon != null;
         manager.getClient().getItemRenderer().renderInGui(matrices, icon, 8, 8);
 
         this.displayed = startTime < 5000L;
