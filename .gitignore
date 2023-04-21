@@ -28,5 +28,3 @@ run/
 
 # local libraries
 libs/*.jar
-
-/CHANGELOG.md
