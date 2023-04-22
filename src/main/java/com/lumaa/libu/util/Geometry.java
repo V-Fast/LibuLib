@@ -133,15 +133,17 @@ public class Geometry {
 
         public Translation3d() {}
 
-        public Translation3d setOriginCoordinates(int x, int y) {
+        public Translation3d setOriginCoordinates(int x, int y, int z) {
             this.x1 = x;
             this.y1 = y;
+            this.z1 = z;
             return this;
         }
 
-        public Translation3d setEndCoordinates(int x, int y) {
+        public Translation3d setEndCoordinates(int x, int y, int z) {
             this.x2 = x;
             this.y2 = y;
+            this.z2 = z;
             return this;
         }
     }
