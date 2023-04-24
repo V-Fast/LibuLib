@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.examplemod.mixin.fabric",
+  "package": "com.lumaa.libu.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
