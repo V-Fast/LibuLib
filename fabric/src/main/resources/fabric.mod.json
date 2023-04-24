@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "libu",
   "version": "${version}",
   "name": "Libu",
   "description": "Library made for developers that doesn't like writing the same code over and over again, just like me, Lumaa.",
