@@ -169,10 +169,18 @@ public class GenerationCore implements IGenerator {
             int k = (t / width) % depth;
             BlockPos blockPos = start.offset(i, j, k);
             if ((world.getBlockState(blockPos).isAir() && overwrite == false)) {
-                world.setBlockAndUpdate(blockPos, block);
+                if (block.isAir()) {
+                    world.removeBlock(blockPos, false);
+                } else {
+                    world.setBlockAndUpdate(blockPos, block);
+                }
             } else if (overwrite == true && world.getBlockState(blockPos).isAir()) {
                 if (breakNonair && !world.getBlockState(blockPos).isAir()) world.removeBlock(blockPos, true);
-                world.setBlockAndUpdate(blockPos, block);
+                if (block.isAir()) {
+                    world.removeBlock(blockPos, false);
+                } else {
+                    world.setBlockAndUpdate(blockPos, block);
+                }
             }
         }
     }
